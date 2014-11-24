@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A58EBB1E-EAB5-4C25-8569-44A91DA4AF9E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JetCode.MapperConfigure</RootNamespace>
+    <AssemblyName>JetCode.MapperConfigure</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\FieldContainerCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FieldContainerCtrl.designer.cs">
+      <DependentUpon>FieldContainerCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FieldCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\FieldCtrl.designer.cs">
+      <DependentUpon>FieldCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GridChildCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GridChildCtrl.designer.cs">
+      <DependentUpon>GridChildCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GridFieldCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GridFieldCtrl.designer.cs">
+      <DependentUpon>GridFieldCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GridJoinCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GridJoinCtrl.designer.cs">
+      <DependentUpon>GridJoinCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GridParentCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GridParentCtrl.Designer.cs">
+      <DependentUpon>GridParentCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TableAliasCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TableAliasCtrl.Designer.cs">
+      <DependentUpon>TableAliasCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCheckJoins.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCheckJoins.designer.cs">
+      <DependentUpon>FormCheckJoins.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormDBConn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDBConn.designer.cs">
+      <DependentUpon>FormDBConn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormFieldDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormFieldDetail.designer.cs">
+      <DependentUpon>FormFieldDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormJoinDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormJoinDetail.Designer.cs">
+      <DependentUpon>FormJoinDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GridIndexCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\GridIndexCtrl.Designer.cs">
+      <DependentUpon>GridIndexCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMappingName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMappingName.Designer.cs">
+      <DependentUpon>FormMappingName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\FieldContainerCtrl.resx">
+      <DependentUpon>FieldContainerCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\FieldCtrl.resx">
+      <DependentUpon>FieldCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GridChildCtrl.resx">
+      <DependentUpon>GridChildCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GridFieldCtrl.resx">
+      <DependentUpon>GridFieldCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GridJoinCtrl.resx">
+      <DependentUpon>GridJoinCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GridParentCtrl.resx">
+      <DependentUpon>GridParentCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TableAliasCtrl.resx">
+      <DependentUpon>TableAliasCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormCheckJoins.resx">
+      <DependentUpon>FormCheckJoins.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDBConn.resx">
+      <DependentUpon>FormDBConn.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormFieldDetail.resx">
+      <DependentUpon>FormFieldDetail.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormJoinDetail.resx">
+      <DependentUpon>FormJoinDetail.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\GridIndexCtrl.resx">
+      <DependentUpon>GridIndexCtrl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMappingName.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FormMappingName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JetCode.BizSchema\JetCode.BizSchema.csproj">
+      <Project>{83396B01-5286-4C63-9185-62D788FA50A8}</Project>
+      <Name>JetCode.BizSchema</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JetCode.DBSchema\JetCode.DBSchema.csproj">
+      <Project>{D8416C88-47FD-43CA-AAEC-7E147F935D3D}</Project>
+      <Name>JetCode.DBSchema</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
