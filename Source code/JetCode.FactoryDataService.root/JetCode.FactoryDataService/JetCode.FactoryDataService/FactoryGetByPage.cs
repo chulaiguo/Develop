@@ -74,7 +74,7 @@ namespace JetCode.FactoryDataService
                 writer.WriteLine("\t\t\tbuilder.Append(\") T \");");
                 writer.WriteLine("\t\t\tbuilder.AppendFormat(\"WHERE rowid BETWEEN {0} AND {1}\", pageIndex * pageSize + 1, (pageIndex + 1) * pageSize);");
                 writer.WriteLine("");
-                writer.WriteLine("\t\t\treturn this._dal.GetCollectionExBy(builder.ToString(), null);");
+                writer.WriteLine("\t\t\treturn this.Processing(this._dal.GetCollectionExBy(builder.ToString(), null));");
                 writer.WriteLine("\t\t}");
                 writer.WriteLine("\t}");
 
