@@ -23,7 +23,7 @@ namespace JetCode.DataServiceBase
             this._connectionString = connectionString;
             this._securityToken = securityToken;
             this._trustedToken = new SecurityToken(securityToken.UserId, string.Empty);
-            this._trustedToken.IsTrusted = true;
+            this._trustedToken.SetAsTrusted("HelloDataServiceEx");
         }
 
         protected string ConnectionString
@@ -169,7 +169,7 @@ namespace JetCode.DataServiceBase
             if (entity == null)
                 return null;
 
-            if (!entity.IsActive && !this.SecurityToken.IncludeInactive)
+            if (!entity.IsActive)
                 return null;
 
             if (!this.Selectable(entity))

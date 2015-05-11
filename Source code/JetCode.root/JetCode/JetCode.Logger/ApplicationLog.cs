@@ -35,7 +35,7 @@ namespace JetCode.Logger
 
         private string GetSecurityTokenInfo(SecurityToken token)
         {
-            return string.Format("(UserId = {0}, Password = {1}, Secret = {2}, Ticks = {3})", new object[] { token.UserId, token.Password, token.Secret, token.Ticks });
+            return string.Format("(UserId = {0}, Password = {1}, Secret = {2}, Ticks = {3})", new object[] { token.UserId, token.Password, token.Ticks, token.Ticks });
         }
 
         public void WriteDebug(string mesg)

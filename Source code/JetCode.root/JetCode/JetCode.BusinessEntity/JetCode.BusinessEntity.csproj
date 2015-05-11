@@ -50,10 +50,15 @@
     <Compile Include="BusinessBase.cs" />
     <Compile Include="BusinessCollectionBase.cs" />
     <Compile Include="CollectionBlock.cs" />
-    <Compile Include="DTOBase.cs" />
-    <Compile Include="DTOCollectionBase.cs" />
+    <Compile Include="IPersist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JetCode\JetCode.csproj">
+      <Project>{a7e79efe-dee8-4da9-8ca1-ef354a83d47f}</Project>
+      <Name>JetCode</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
