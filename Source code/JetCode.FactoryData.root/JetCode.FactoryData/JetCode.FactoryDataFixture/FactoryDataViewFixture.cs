@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace JetCode.FactoryDataFixture
 {
     [TestFixture]
-    public class FactoryViewFixture : FixtureBase
+    public class FactoryDataViewFixture : FixtureBase
     {
         [SetUp]
         public void SetUp()
@@ -20,7 +20,7 @@ namespace JetCode.FactoryDataFixture
 
         protected override string SrcDirectory
         {
-            get { return string.Format(@"{0}\Data.ViewCode", BasePath); }
+            get { return string.Format(@"{0}\Data_DataView", BasePath); }
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace JetCode.FactoryDataFixture
         {
             foreach (ObjectSchema item in base.Schema.Objects)
             {
-                FactoryView detail = new FactoryView(base.Schema, item);
+                FactoryDataView detail = new FactoryDataView(base.Schema, item);
                 base.WriteToScreen(detail);
             }
         }
@@ -42,7 +42,7 @@ namespace JetCode.FactoryDataFixture
             {
                 string viewFileName = string.Format(@"{0}\{1}View.cs", this.SrcDirectory, item.Alias);
 
-                FactoryView view = new FactoryView(base.Schema, item);
+                FactoryDataView view = new FactoryDataView(base.Schema, item);
                 base.WriteToFile(viewFileName, view);
             }
         }

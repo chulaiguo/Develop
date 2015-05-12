@@ -48,6 +48,7 @@ namespace JetCode.FactoryData
                 this.WriteContains(writer, item);
                 this.WriteContainsDeleted(writer, item);
                 this.WriteItem(writer, item);
+                this.WriteOnValidate(writer, item);
 
                 writer.WriteLine("\t}");
             }
@@ -161,6 +162,20 @@ namespace JetCode.FactoryData
             writer.WriteLine("\t\t\t\t}");
             writer.WriteLine("\t\t\t}");
             writer.WriteLine("\t\t\treturn false;");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine();
+        }
+
+        private void WriteOnValidate(StringWriter writer, ObjectSchema item)
+        {
+            writer.WriteLine("\t\tprotected override void OnValidate(object item)");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tSystem.Type t = item.GetType();");
+            writer.WriteLine("\t\t\tif (t != base._itemType && !t.IsSubclassOf(base._itemType))");
+            writer.WriteLine("\t\t\t\t{");
+            writer.WriteLine("\t\t\t\t\tthrow new ArgumentException(\"The item must be a type of {0}Data\");", item.Alias);
+            writer.WriteLine("\t\t\t\t}");
+            writer.WriteLine("\t\t\t}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
         }

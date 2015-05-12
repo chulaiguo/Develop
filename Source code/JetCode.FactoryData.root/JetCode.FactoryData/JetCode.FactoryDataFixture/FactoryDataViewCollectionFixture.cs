@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace JetCode.FactoryDataFixture
 {
     [TestFixture]
-    public class FactoryViewCollectionFixture : FixtureBase
+    public class FactoryDataViewCollectionFixture : FixtureBase
     {
         [SetUp]
         public void SetUp()
@@ -20,13 +20,13 @@ namespace JetCode.FactoryDataFixture
 
         protected override string SrcDirectory
         {
-            get { return string.Format(@"{0}\Data.ViewCollectionCode", BasePath); }
+            get { return string.Format(@"{0}\Data_DataViewList", BasePath); }
         }
 
         [Test]
         public void WriteCodeToScreen()
         {
-            FactoryViewCollection design = new FactoryViewCollection(base.Schema);
+            FactoryDataViewCollection design = new FactoryDataViewCollection(base.Schema);
             base.WriteToScreen(design);
         }
 
@@ -38,7 +38,7 @@ namespace JetCode.FactoryDataFixture
            
             string viewCollectionFileName = string.Format(@"{0}\ViewCollection.cs", this.SrcDirectory);
 
-            FactoryViewCollection viewCollection = new FactoryViewCollection(base.Schema);
+            FactoryDataViewCollection viewCollection = new FactoryDataViewCollection(base.Schema);
             base.WriteToFile(viewCollectionFileName, viewCollection);
         }
     }

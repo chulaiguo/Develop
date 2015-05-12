@@ -7,9 +7,9 @@ using JetCode.Factory;
 
 namespace JetCode.FactoryData
 {
-    public class FactoryView : FactoryBase
+    public class FactoryDataView : FactoryBase
     {
-        public FactoryView(MappingSchema mappingSchema, ObjectSchema objectSchema) 
+        public FactoryDataView(MappingSchema mappingSchema, ObjectSchema objectSchema) 
             : base(mappingSchema, objectSchema)
         {
         }

@@ -4,9 +4,9 @@ using JetCode.Factory;
 
 namespace JetCode.FactoryData
 {
-    public class FactoryViewCollection : FactoryBase
+    public class FactoryDataViewCollection : FactoryBase
     {
-        public FactoryViewCollection(MappingSchema mappingSchema) 
+        public FactoryDataViewCollection(MappingSchema mappingSchema) 
             : base(mappingSchema)
         {
         }

@@ -63,7 +63,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FactoryDataCollectionFixture.cs" />
     <Compile Include="FactoryDataFixture.cs" />
     <Compile Include="FactoryDBRuleFixture.cs" />
     <Compile Include="FactoryFullNameFixture.cs" />
@@ -71,8 +70,8 @@
     <Compile Include="FactoryDecimalRoundFixture.cs" />
     <Compile Include="FactoryRulesFixture.cs" />
     <Compile Include="FactoryRuleCheckFixture.cs" />
-    <Compile Include="FactoryViewCollectionFixture.cs" />
-    <Compile Include="FactoryViewFixture.cs" />
+    <Compile Include="FactoryDataViewCollectionFixture.cs" />
+    <Compile Include="FactoryDataViewFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

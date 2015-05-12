@@ -19,7 +19,7 @@ namespace JetCode.FactoryDataFixture
 
         protected override string SrcDirectory
         {
-            get { return string.Format(@"{0}\Rules.CheckRule", BasePath); }
+            get { return string.Format(@"{0}\Data_RulesCheck", BasePath); }
         }
 
         [Test]
