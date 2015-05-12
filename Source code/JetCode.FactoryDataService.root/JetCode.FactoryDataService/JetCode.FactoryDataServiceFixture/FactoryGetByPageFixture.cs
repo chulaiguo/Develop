@@ -19,7 +19,7 @@ namespace JetCode.FactoryDataServiceFixture
 
         protected override string SrcDirectory
         {
-            get { return string.Format(@"{0}\DataService.GetByPageCode", BasePath); }
+            get { return string.Format(@"{0}\DataService.GetByPage", BasePath); }
         }
 
         [Test]
