@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryViewObjFixture.cs" />
     <Compile Include="FactoryDataFixture.cs" />
     <Compile Include="FactoryDBRuleFixture.cs" />
     <Compile Include="FactoryFullNameFixture.cs" />

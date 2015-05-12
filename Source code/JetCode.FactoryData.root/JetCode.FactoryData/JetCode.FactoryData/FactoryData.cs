@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using JetCode.BizSchema;
 using JetCode.Factory;
@@ -41,19 +42,19 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\tpublic partial class {0}Data : BusinessBase", item.Alias);
                 writer.WriteLine("\t{");
 
-                this.WriteFields(writer, item);
+                this.WriteItemFields(writer, item);
                 this.WriteItemConstructor(writer, item);
-                this.WriteProperties(writer, item);
+                this.WriteItemProperties(writer, item);
 
-                this.WriteCopyFromMethod(writer, item);
-                this.WriteCloneChildrenMethod(writer, item);
-                this.WriteAcceptChangesMethod(writer, item);
-                this.WriteEqualMethod(writer, item);
-                this.WriteGetHashCodeMethod(writer, item);
-                this.WriteToStringMethod(writer, item);
-                this.WriteIsDirty(writer, item);
-                this.WriteIsValid(writer, item);
-                this.WriteBindingEvent(writer, item);
+                this.WriteItemCopyFromMethod(writer, item);
+                this.WriteItemCloneChildrenMethod(writer, item);
+                this.WriteItemAcceptChangesMethod(writer, item);
+                this.WriteItemEqualMethod(writer, item);
+                this.WriteItemGetHashCodeMethod(writer, item);
+                this.WriteItemToStringMethod(writer, item);
+                this.WriteItemIsDirty(writer, item);
+                this.WriteItemIsValid(writer, item);
+                this.WriteItemBindingEvent(writer, item);
                 
                 writer.WriteLine("\t}");
             }
@@ -65,22 +66,21 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\t{");
 
                 this.WriteListConstructor(writer, item);
-                this.WriteTableName(writer, item);
-                this.WriteAdd(writer, item);
-                this.WriteAddRange(writer, item);
-                this.WriteRemove(writer, item);
-                this.WriteInsert(writer, item);
-                this.WriteContains(writer, item);
-                this.WriteContainsDeleted(writer, item);
-                this.WriteItem(writer, item);
-                this.WriteOnValidate(writer, item);
+                this.WriteListAdd(writer, item);
+                this.WriteListAddRange(writer, item);
+                this.WriteListRemove(writer, item);
+                this.WriteListInsert(writer, item);
+                this.WriteListContains(writer, item);
+                this.WriteListContainsDeleted(writer, item);
+                this.WriteListIndex(writer, item);
+                this.WriteListOnValidate(writer, item);
 
                 writer.WriteLine("\t}");
             }
         }
 
         #region Item
-        private void WriteFields(StringWriter writer, ObjectSchema obj)
+        private void WriteItemFields(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\t#region Fields");
             foreach(FieldSchema item in obj.Fields)
@@ -132,6 +132,7 @@ namespace JetCode.FactoryData
             }
             writer.WriteLine();
             writer.WriteLine("\t\t\tbase.MarkNew();");
+            writer.WriteLine("\t\t\tthis.InitMemberVariables();");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 
@@ -145,7 +146,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteProperties(StringWriter writer, ObjectSchema obj)
+        private void WriteItemProperties(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\t#region Properties");
             //Field
@@ -240,6 +241,39 @@ namespace JetCode.FactoryData
                 writer.WriteLine();
             }
 
+            //Parent
+            foreach (ParentSchema item in obj.Parents)
+            {
+                List<string> list = GetJoinedParentField(obj, item);
+                writer.WriteLine("\t\tpublic virtual {0}Data {0}", item.Alias);
+                writer.WriteLine("\t\t{");
+
+                writer.WriteLine("\t\t\tget");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\t{0}Data parent = new {0}Data();", item.Alias);
+                writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", item.RemoteColumn, item.LocalColumn);
+                foreach (string joinField in list)
+                {
+                    writer.WriteLine("\t\t\t\tparent.{0} = this.{0};", joinField);
+                }
+                writer.WriteLine("\t\t\t\treturn parent;");
+                writer.WriteLine("\t\t\t}");
+
+                writer.WriteLine("\t\t\tset");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\tif(value == null)");
+                writer.WriteLine("\t\t\t\t\treturn;");
+                writer.WriteLine();
+                writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", item.LocalColumn, item.RemoteColumn);
+                foreach (string joinField in list)
+                {
+                    writer.WriteLine("\t\t\t\tthis.{0} = value.{0};", joinField);
+                }
+                writer.WriteLine("\t\t\t}");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+            }
+
             //Table Name
             writer.WriteLine("\t\tpublic override string TableName");
             writer.WriteLine("\t\t{");
@@ -254,7 +288,24 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteCopyFromMethod(StringWriter writer, ObjectSchema obj)
+        private List<string> GetJoinedParentField(ObjectSchema obj, ParentSchema parent)
+        {
+            List<string> retList = new List<string>();
+            foreach (FieldSchema item in obj.Fields)
+            {
+                if(!item.IsJoined)
+                    continue;
+
+                if(item.TableAlias != parent.Alias)
+                    continue;
+
+                retList.Add(item.Alias);
+            }
+
+            return retList;
+        }
+
+        private void WriteItemCopyFromMethod(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\tpublic override void CopyFrom(BusinessBase entity, bool all)");
             writer.WriteLine("\t\t{");
@@ -300,7 +351,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteCloneChildrenMethod(StringWriter writer, ObjectSchema obj)
+        private void WriteItemCloneChildrenMethod(StringWriter writer, ObjectSchema obj)
         {
             if (obj.Children.Count == 0)
                 return;
@@ -324,7 +375,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteAcceptChangesMethod(StringWriter writer, ObjectSchema obj)
+        private void WriteItemAcceptChangesMethod(StringWriter writer, ObjectSchema obj)
         {
             if (obj.Children.Count == 0)
                 return;
@@ -346,7 +397,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteEqualMethod(StringWriter writer, ObjectSchema obj)
+        private void WriteItemEqualMethod(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\tpublic override bool Equals(object obj)");
             writer.WriteLine("\t\t{");
@@ -373,7 +424,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteGetHashCodeMethod(StringWriter writer, ObjectSchema obj)
+        private void WriteItemGetHashCodeMethod(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\tpublic override int GetHashCode()");
             writer.WriteLine("\t\t{");
@@ -382,7 +433,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteBindingEvent(StringWriter writer, ObjectSchema obj)
+        private void WriteItemBindingEvent(StringWriter writer, ObjectSchema obj)
         {
            writer.WriteLine("\t\t#region Binding Events");
             //Field
@@ -408,7 +459,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteToStringMethod(StringWriter writer, ObjectSchema obj)
+        private void WriteItemToStringMethod(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\tpublic override string PKString");
             writer.WriteLine("\t\t{");
@@ -446,7 +497,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteIsDirty(StringWriter writer, ObjectSchema obj)
+        private void WriteItemIsDirty(StringWriter writer, ObjectSchema obj)
         {
             if(obj.Children.Count == 0)
                 return;
@@ -474,7 +525,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteIsValid(StringWriter writer, ObjectSchema obj)
+        private void WriteItemIsValid(StringWriter writer, ObjectSchema obj)
         {
             if (obj.Children.Count == 0)
                 return;
@@ -532,20 +583,17 @@ namespace JetCode.FactoryData
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 
-            writer.WriteLine("\t\t#endregion");
-            writer.WriteLine();
-        }
-
-        private void WriteTableName(StringWriter writer, ObjectSchema item)
-        {
             writer.WriteLine("\t\tpublic override string TableName");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget {{ return \"{0}\"; }}", item.Alias);
             writer.WriteLine("\t\t}");
             writer.WriteLine();
+
+            writer.WriteLine("\t\t#endregion");
+            writer.WriteLine();
         }
 
-        private void WriteAdd(StringWriter writer, ObjectSchema item)
+        private void WriteListAdd(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic void Add({0}Data obj)", item.Alias);
             writer.WriteLine("\t\t{");
@@ -554,7 +602,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteAddRange(StringWriter writer, ObjectSchema item)
+        private void WriteListAddRange(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic void AddRange({0}DataCollection list)", item.Alias);
             writer.WriteLine("\t\t{");
@@ -566,7 +614,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteRemove(StringWriter writer, ObjectSchema item)
+        private void WriteListRemove(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic void Remove({0}Data obj)", item.Alias);
             writer.WriteLine("\t\t{");
@@ -575,7 +623,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteInsert(StringWriter writer, ObjectSchema item)
+        private void WriteListInsert(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic void Insert(int index, {0}Data obj)", item.Alias);
             writer.WriteLine("\t\t{");
@@ -584,7 +632,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteContains(StringWriter writer, ObjectSchema item)
+        private void WriteListContains(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic bool Contains({0}Data item)", item.Name);
             writer.WriteLine("\t\t{");
@@ -600,7 +648,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteContainsDeleted(StringWriter writer, ObjectSchema item)
+        private void WriteListContainsDeleted(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic bool ContainsDeleted({0}Data item)", item.Name);
             writer.WriteLine("\t\t{");
@@ -616,7 +664,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteOnValidate(StringWriter writer, ObjectSchema item)
+        private void WriteListOnValidate(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tprotected override void OnValidate(object item)");
             writer.WriteLine("\t\t{");
@@ -629,7 +677,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
         }
 
-        private void WriteItem(StringWriter writer, ObjectSchema item)
+        private void WriteListIndex(StringWriter writer, ObjectSchema item)
         {
             writer.WriteLine("\t\tpublic new {0}Data this[int index]", item.Name);
             writer.WriteLine("\t\t{");

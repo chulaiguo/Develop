@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryViewObj.cs" />
     <Compile Include="FactoryData.cs" />
     <Compile Include="FactoryDBRule.cs" />
     <Compile Include="FactoryFullName.cs" />
