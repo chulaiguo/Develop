@@ -219,7 +219,7 @@ namespace JetCode.FactoryData
         {
             writer.WriteLine("\t\t#region Constructors");
 
-            writer.WriteLine("\t\tpublic partial class {0}Collection : {0}DataCollection, Cheke.BusinessEntity.IPersist", item.Alias);
+            writer.WriteLine("\t\tpublic {0}Collection()", item.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tbase._itemType = typeof({0});", item.Alias);
             writer.WriteLine("\t\t}");

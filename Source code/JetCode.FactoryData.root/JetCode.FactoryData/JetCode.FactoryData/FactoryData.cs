@@ -173,6 +173,10 @@ namespace JetCode.FactoryData
                     writer.WriteLine("\t\t\t\tSystem.DateTime utcTime = new System.DateTime(this._{0}.Ticks, DateTimeKind.Utc);", base.LowerFirstLetter(item.Alias));
                     writer.WriteLine("\t\t\t\treturn utcTime.ToLocalTime();");
                 }
+                else if (Utilities.ToDotNetType(item.DataType) == typeof(string))
+                {
+                    writer.WriteLine("\t\t\t\treturn this._{0} == null ? null : this._{0}.Trim();", base.LowerFirstLetter(item.Alias));
+                }
                 else
                 {
                     writer.WriteLine("\t\t\t\treturn this._{0};", base.LowerFirstLetter(item.Alias));
@@ -187,6 +191,10 @@ namespace JetCode.FactoryData
                     if (Utilities.ToDotNetType(item.DataType) == typeof (DateTime))
                     {
                         writer.WriteLine("\t\t\t\t this._{0} = value.ToUniversalTime();", base.LowerFirstLetter(item.Alias));
+                    }
+                    else if (Utilities.ToDotNetType(item.DataType) == typeof(string))
+                    {
+                        writer.WriteLine("\t\t\t\t this._{0} = value == null ? null : value.Trim();", base.LowerFirstLetter(item.Alias));
                     }
                     else
                     {
@@ -205,6 +213,10 @@ namespace JetCode.FactoryData
                     if (Utilities.ToDotNetType(item.DataType) == typeof (DateTime))
                     {
                         writer.WriteLine("\t\t\t\t\t\tthis._{0} = value.ToUniversalTime();", base.LowerFirstLetter(item.Alias));
+                    }
+                    else if (Utilities.ToDotNetType(item.DataType) == typeof(string))
+                    {
+                        writer.WriteLine("\t\t\t\t\t\tthis._{0} = value == null ? null : value.Trim();", base.LowerFirstLetter(item.Alias));
                     }
                     else
                     {
