@@ -205,7 +205,7 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic int Insert({0}Data entity)", obj.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring sql = \"{0}\";", sql);
-            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", obj.Fields.Count);
+            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", this.GetInsertFieldCount(obj));
             int i = 0;
             foreach (FieldSchema item in obj.Fields)
             {
@@ -293,7 +293,7 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic int Update({0}Data entity)", obj.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring sql = \"{0}\";", sql);
-            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", obj.Fields.Count);
+            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", this.GetUpdateFieldCount(obj));
 
             int i = 0;
             foreach (FieldSchema item in obj.Fields)
@@ -334,8 +334,39 @@ namespace JetCode.FactoryDataService
             writer.WriteLine();
         }
 
+        private int GetInsertFieldCount(ObjectSchema obj)
+        {
+            int ret = 0;
+            foreach (FieldSchema item in obj.Fields)
+            {
+                if (item.IsJoined)
+                    continue;
 
-        private void WriteFetchEntity(StringWriter writer, ObjectSchema obj)
+                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
+                    continue;
+
+                ret++;
+            }
+
+            return ret;
+        }
+
+        private int GetUpdateFieldCount(ObjectSchema obj)
+        {
+            int ret = 0;
+            foreach (FieldSchema item in obj.Fields)
+            {
+                if (item.IsJoined)
+                    continue;
+
+                ret++;
+            }
+
+            return ret;
+        }
+
+        private
+             void WriteFetchEntity(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\tprivate {0}Data CreateDataByReader(SafeDataReader reader)", obj.Alias);
             writer.WriteLine("\t\t{");
