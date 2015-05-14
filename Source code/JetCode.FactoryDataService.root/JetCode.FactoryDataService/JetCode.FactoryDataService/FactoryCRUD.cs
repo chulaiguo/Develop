@@ -365,8 +365,7 @@ namespace JetCode.FactoryDataService
             return ret;
         }
 
-        private
-             void WriteFetchEntity(StringWriter writer, ObjectSchema obj)
+        private void WriteFetchEntity(StringWriter writer, ObjectSchema obj)
         {
             writer.WriteLine("\t\tprivate {0}Data CreateDataByReader(SafeDataReader reader)", obj.Alias);
             writer.WriteLine("\t\t{");
@@ -376,11 +375,11 @@ namespace JetCode.FactoryDataService
                 FieldSchema item = obj.Fields[i];
                 if (i == obj.Fields.Count - 1)
                 {
-                    writer.WriteLine("\t\t\t\t{0} = ({1}) reader[\"{0}\"]", item.Name, Utilities.ToDotNetType(item.DataType).Name);
+                    writer.WriteLine("\t\t\t\t{0} = ({1}) reader[\"{0}\"]", item.Alias, Utilities.ToDotNetType(item.DataType).Name);
                 }
                 else
                 {
-                    writer.WriteLine("\t\t\t\t{0} = ({1}) reader[\"{0}\"],", item.Name, Utilities.ToDotNetType(item.DataType).Name);
+                    writer.WriteLine("\t\t\t\t{0} = ({1}) reader[\"{0}\"],", item.Alias, Utilities.ToDotNetType(item.DataType).Name);
                 }
             }
            
