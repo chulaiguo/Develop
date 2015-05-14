@@ -118,7 +118,7 @@ namespace JetCode.FactoryData
             //Parent
             foreach (ParentSchema item in obj.Parents)
             {
-                List<string> list = GetJoinedParentField(obj, item);
+               SortedList<string, string> list = GetJoinedParentField(obj, item);
                 writer.WriteLine("\t\tpublic new virtual {0} {0}", item.Alias);
                 writer.WriteLine("\t\t{");
 
@@ -126,9 +126,9 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\t\t\t{");
                 writer.WriteLine("\t\t\t\t{0} parent = new {0}();", item.Alias);
                 writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", item.RemoteColumn, item.LocalColumn);
-                foreach (string joinField in list)
+                foreach (KeyValuePair<string, string> pair in list)
                 {
-                    writer.WriteLine("\t\t\t\tparent.{0} = this.{0};", joinField);
+                    writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", pair.Key, pair.Value);
                 }
                 writer.WriteLine("\t\t\t\treturn parent;");
                 writer.WriteLine("\t\t\t}");
@@ -139,9 +139,9 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\t\t\t\t\treturn;");
                 writer.WriteLine();
                 writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", item.LocalColumn, item.RemoteColumn);
-                foreach (string joinField in list)
+                foreach (KeyValuePair<string, string> pair in list)
                 {
-                    writer.WriteLine("\t\t\t\tthis.{0} = value.{0};", joinField);
+                    writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", pair.Value, pair.Key);
                 }
                 writer.WriteLine("\t\t\t}");
                 writer.WriteLine("\t\t}");
@@ -150,9 +150,9 @@ namespace JetCode.FactoryData
 
         }
 
-        private List<string> GetJoinedParentField(ObjectSchema obj, ParentSchema parent)
+        private SortedList<string, string> GetJoinedParentField(ObjectSchema obj, ParentSchema parent)
         {
-            List<string> retList = new List<string>();
+            SortedList<string, string> retList = new SortedList<string, string>();
             foreach (FieldSchema item in obj.Fields)
             {
                 if (!item.IsJoined)
@@ -161,7 +161,7 @@ namespace JetCode.FactoryData
                 if (item.TableAlias != parent.Alias)
                     continue;
 
-                retList.Add(item.Alias);
+                retList.Add(item.Name, item.Alias);
             }
 
             return retList;
