@@ -79,10 +79,18 @@ namespace JetCode.FactoryDataService
 
         private void WriteConstructor(StringWriter writer, ObjectSchema obj)
         {
+            writer.WriteLine("\t\tprivate string _tableName = \"{0}\";", obj.Name);
+            writer.WriteLine();
             writer.WriteLine("\t\tpublic {0}CRUD(string connectionString) : base(connectionString)", obj.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
+
+            writer.WriteLine("\t\tpublic virtual string TableName");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tget { return this._tableName; }");
+            writer.WriteLine("\t\t\tset { this._tableName = value; }");
+            writer.WriteLine("\t\t}");
 
             writer.WriteLine();
         }
@@ -143,9 +151,8 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget");
             writer.WriteLine("\t\t\t{");
-            writer.WriteLine("\t\t\t\treturn \"SELECT {0} \"", fieldsBuilder.ToString().TrimEnd(','));
-            writer.WriteLine("\t\t\t\t\t+ \" FROM [{0}] [{1}] \"", obj.Name, obj.Alias);
-            writer.WriteLine("\t\t\t\t\t+ \" {0}\";", joinsBuilder.ToString().TrimEnd(' '));
+            writer.WriteLine("\t\t\t\treturn string.Format(\"SELECT {0} FROM [{{0}}] [{1}] {2}\", this.TableName);",
+                fieldsBuilder.ToString().TrimEnd(','), obj.Alias, joinsBuilder.ToString().TrimEnd(' '));
             writer.WriteLine("\t\t\t}");
             writer.WriteLine("\t\t}");
 
@@ -164,8 +171,8 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget");
             writer.WriteLine("\t\t\t{");
-            writer.WriteLine("\t\t\t\treturn \"SELECT COUNT(*) FROM [{0}] [{1}] \"", obj.Name, obj.Alias);
-            writer.WriteLine("\t\t\t\t\t+ \" {0}\";", joinsBuilder.ToString().TrimEnd(' '));
+            writer.WriteLine("\t\t\t\treturn string.Format(\"SELECT COUNT(*) FROM [{{0}}] [{0}] {1}\", this.TableName);", 
+                obj.Alias, joinsBuilder.ToString().TrimEnd(' '));
             writer.WriteLine("\t\t\t}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
@@ -175,7 +182,7 @@ namespace JetCode.FactoryDataService
         private void WriteInsert(StringWriter writer, ObjectSchema obj)
         {
             StringBuilder sqlBuilder = new StringBuilder();
-            sqlBuilder.AppendFormat("INSERT INTO [{0}] (", obj.Name);
+            sqlBuilder.AppendFormat("INSERT INTO [{{0}}] (");
             foreach (FieldSchema item in obj.Fields)
             {
                 if(item.IsJoined)
@@ -204,7 +211,7 @@ namespace JetCode.FactoryDataService
 
             writer.WriteLine("\t\tpublic int Insert({0}Data entity)", obj.Alias);
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = \"{0}\";", sql);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
             writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", this.GetInsertFieldCount(obj));
             int i = 0;
             foreach (FieldSchema item in obj.Fields)
@@ -251,7 +258,7 @@ namespace JetCode.FactoryDataService
         private void WriteUpdate(StringWriter writer, ObjectSchema obj)
         {
             StringBuilder sqlBuilder = new StringBuilder();
-            sqlBuilder.AppendFormat("UPDATE [{0}] SET ", obj.Name);
+            sqlBuilder.AppendFormat("UPDATE [{{0}}] SET ");
             string rowVersion = string.Empty;
             StringCollection pkList = new StringCollection();
             foreach (FieldSchema item in obj.Fields)
@@ -292,7 +299,7 @@ namespace JetCode.FactoryDataService
 
             writer.WriteLine("\t\tpublic int Update({0}Data entity)", obj.Alias);
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = \"{0}\";", sql);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
             writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", this.GetUpdateFieldCount(obj));
 
             int i = 0;
@@ -495,7 +502,7 @@ namespace JetCode.FactoryDataService
             List<FieldSchema> pkList = obj.GetPKList();
 
             StringBuilder sqlBuilder = new StringBuilder();
-            sqlBuilder.AppendFormat("SELECT [{0}] AS [{1}] FROM [{2}] WHERE ", rowVersion.Name, rowVersion.Name, obj.Name);
+            sqlBuilder.AppendFormat("SELECT [{0}] AS [{1}] FROM [{{0}}] WHERE ", rowVersion.Name, rowVersion.Name);
             foreach (FieldSchema item in pkList)
             {
                 sqlBuilder.AppendFormat(" [{0}] = @{0} AND", item.Name);
@@ -508,7 +515,7 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic byte[] GetRowVersion({0})", pkParams);
 
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = \"{0}\";", sql);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
             writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", pkList.Count);
 
             int i = 0;
@@ -606,7 +613,7 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic DataTable GetLogByPK({0})", pkParams);
 
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = \"SELECT {0} FROM [{1}] WHERE {2}\";", this.GetLogColumns(obj), obj.Name, sqlWhere);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"SELECT {0} FROM [{{0}}] WHERE {1}\", this.TableName);", this.GetLogColumns(obj), sqlWhere);
             writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", pkList.Count);
 
             int i = 0;
@@ -639,9 +646,9 @@ namespace JetCode.FactoryDataService
                 writer.WriteLine("\t\tpublic DataTable GetLogBy{0}({1} {2})", item.Alias,
                                  base.Utilities.ToDotNetType(field.DataType), base.LowerFirstLetter(field.Name));
                 writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\tstring sql = \"{0}\";", this.GetDeleteByParentSql(item, obj));
+                writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", this.GetDeleteByParentSql(item, obj));
 
-                writer.WriteLine("\t\t\tstring oldValue = \"DELETE [{0}]\";", obj.Name);
+                writer.WriteLine("\t\t\tstring oldValue = string.Format(\"DELETE [{0}]\", this.TableName);");
                 writer.WriteLine("\t\t\tstring newValue = \"SELECT {0}\";", this.GetLogColumns(obj));
                 writer.WriteLine("\t\t\tsql = sql.Replace(oldValue, newValue).TrimEnd().TrimEnd(';').Replace(\",\", \"UNION\");");
 
@@ -682,7 +689,7 @@ namespace JetCode.FactoryDataService
             List<FieldSchema> pkList = obj.GetPKList();
 
             StringBuilder sqlBuilder = new StringBuilder();
-            sqlBuilder.AppendFormat("DELETE FROM [{0}] WHERE ", obj.Name);
+            sqlBuilder.AppendFormat("DELETE FROM [{{0}}] WHERE ");
             foreach (FieldSchema item in pkList)
             {
                 sqlBuilder.AppendFormat(" [{0}] = @{0} AND", item.Name);
@@ -706,7 +713,7 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic int DeleteByPK({0})", pkInputParams);
 
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = \"{0}\";", sql);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
 
             if (rowVersion != null)
             {
@@ -742,7 +749,7 @@ namespace JetCode.FactoryDataService
         {
             writer.WriteLine("\t\tpublic int DeleteAll()");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = \"DELETE FROM [{0}]\";", obj.Name);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"DELETE FROM [{0}]\", this.TableName);");
             writer.WriteLine("\t\t\treturn base.ExecuteNonQuery(sql, null);");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
@@ -764,7 +771,7 @@ namespace JetCode.FactoryDataService
                 writer.WriteLine("\t\tpublic int DeleteBy{0}({1} {2})", item.Alias, 
                                  base.Utilities.ToDotNetType(field.DataType), base.LowerFirstLetter(field.Name));
                 writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\tstring sql = \"{0}\";", this.GetDeleteByParentSql(item, obj));
+                writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", this.GetDeleteByParentSql(item, obj));
                 writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[1];");
                 writer.WriteLine("\t\t\tparas[0] = new SqlParameter(\"@{0}\", {1});", field.Name, this.ToSqlDBType(field));
                 writer.WriteLine("\t\t\tparas[0].Value = {0};", base.LowerFirstLetter(field.Name));
@@ -785,13 +792,13 @@ namespace JetCode.FactoryDataService
             StringBuilder builder = new StringBuilder();
             foreach (List<ParentSchema> path in listPath)
             {
-                builder.AppendFormat("DELETE [{0}] FROM [{0}] ", obj.Name);
+                builder.AppendFormat("DELETE [{{0}}] FROM [{{0}}] [{0}] ", obj.Alias);
                 for (int i = path.Count - 1; i >= 0; i--)
                 {
                     if (i == path.Count - 1)
                     {
                         builder.AppendFormat("INNER JOIN [{0}] ON [{1}].[{2}] = [{0}].[{3}] ",
-                                             path[i].Name, obj.Name, path[i].LocalColumn, path[i].RemoteColumn); 
+                                             path[i].Name, obj.Alias, path[i].LocalColumn, path[i].RemoteColumn); 
                     }
                     else
                     {

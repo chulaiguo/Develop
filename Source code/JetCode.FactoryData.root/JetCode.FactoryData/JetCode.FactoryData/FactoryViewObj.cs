@@ -17,14 +17,17 @@ namespace JetCode.FactoryData
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Data;");
             writer.WriteLine("using System.Text;");
+            writer.WriteLine("using Cheke;");
             writer.WriteLine("using Cheke.BusinessEntity;");
-
+            writer.WriteLine("using W3000.Data;");
+            writer.WriteLine("using W3000.BasicServiceWrapper;");
+            
             writer.WriteLine();
         }
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.Data", base.ProjectName);
+            writer.WriteLine("namespace {0}.ViewObj", base.ProjectName);
             writer.WriteLine("{");
         }
 
@@ -53,7 +56,7 @@ namespace JetCode.FactoryData
             foreach (ObjectSchema item in base.MappingSchema.Objects)
             {
                 writer.WriteLine("\t[Serializable]");
-                writer.WriteLine("\tpublic class {0}DataCollection : BusinessCollectionBase", item.Alias);
+                writer.WriteLine("\tpublic class {0}Collection : {0}DataCollection, Cheke.BusinessEntity.IPersist", item.Alias);
                 writer.WriteLine("\t{");
 
                 this.WriteListConstructor(writer, item);
@@ -82,7 +85,7 @@ namespace JetCode.FactoryData
             writer.WriteLine();
 
             writer.WriteLine("\t\tpublic {0}({0}Data data)", obj.Alias);
-            writer.WriteLine("\t\t\tbase(data)");
+            writer.WriteLine("\t\t\t:base(data)");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t}");
 
