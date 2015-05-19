@@ -650,7 +650,7 @@ namespace JetCode.FactoryDataService
 
                 writer.WriteLine("\t\t\tstring oldValue = string.Format(\"DELETE [{0}]\", this.TableName);");
                 writer.WriteLine("\t\t\tstring newValue = \"SELECT {0}\";", this.GetLogColumns(obj));
-                writer.WriteLine("\t\t\tsql = sql.Replace(oldValue, newValue).TrimEnd().TrimEnd(';').Replace(\",\", \"UNION\");");
+                writer.WriteLine("\t\t\tsql = sql.Replace(oldValue, newValue).TrimEnd().TrimEnd(';').Replace(\";\", \" UNION \");");
 
                 writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[1];");
                 writer.WriteLine("\t\t\tparas[0] = new SqlParameter(\"@{0}\", {1});", field.Name, this.ToSqlDBType(field));
