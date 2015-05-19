@@ -45,6 +45,9 @@ namespace JetCode.FactoryData
                 this.WriteItemFields(writer, item);
                 this.WriteItemConstructor(writer, item);
                 this.WriteItemProperties(writer, item);
+                this.WriteItemTableName(writer, item);
+                this.WriteItemChildren(writer, item);
+                this.WriteItemParent(writer, item);
 
                 this.WriteItemCopyFromMethod(writer, item);
                 this.WriteItemCloneChildrenMethod(writer, item);
@@ -233,8 +236,28 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
             }
+        
+            writer.WriteLine("\t\t#endregion");
+            writer.WriteLine();
+        }
 
-            //Children
+        private void WriteItemTableName(StringWriter writer, ObjectSchema obj)
+        {
+            writer.WriteLine("\t\t#region TableName");
+            writer.WriteLine("\t\tpublic override string TableName");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tget");
+            writer.WriteLine("\t\t\t{");
+            writer.WriteLine("\t\t\t\treturn \"{0}\";", obj.Alias);
+            writer.WriteLine("\t\t\t}");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine("\t\t#endregion");
+            writer.WriteLine();
+        }
+
+        private void WriteItemChildren(StringWriter writer, ObjectSchema obj)
+        {
+            writer.WriteLine("\t\t#region Children");
             foreach (ChildSchema item in obj.Children)
             {
                 writer.WriteLine("\t\tpublic virtual {0}DataCollection {0}List", item.Alias);
@@ -252,21 +275,28 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
             }
+            writer.WriteLine("\t\t#endregion");
+            writer.WriteLine();
 
-            //Parent
-            foreach (ParentSchema item in obj.Parents)
+        }
+
+        private void WriteItemParent(StringWriter writer, ObjectSchema obj)
+        {
+            writer.WriteLine("\t\t#region Parents");
+            //Joined Parent
+            SortedList<string, List<FieldSchema>> joinedParents = this.GetJoinedParents(obj);
+            foreach (KeyValuePair<string, List<FieldSchema>> pair in joinedParents)
             {
-                SortedList<string, string> list = GetJoinedParentField(obj, item);
-                writer.WriteLine("\t\tpublic virtual {0}Data {0}", item.Alias);
+                List<FieldSchema> list = pair.Value;
+                writer.WriteLine("\t\tpublic virtual {0}Data {0}", pair.Key);
                 writer.WriteLine("\t\t{");
 
                 writer.WriteLine("\t\t\tget");
                 writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\t{0}Data parent = new {0}Data();", item.Alias);
-                writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", item.RemoteColumn, item.LocalColumn);
-                foreach (KeyValuePair<string, string> pair in list)
+                writer.WriteLine("\t\t\t\t{0}Data parent = new {0}Data();", pair.Key);
+                foreach (FieldSchema item in list)
                 {
-                    writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", pair.Key, pair.Value);
+                    writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", item.Name, item.Alias);
                 }
                 writer.WriteLine("\t\t\t\treturn parent;");
                 writer.WriteLine("\t\t\t}");
@@ -276,45 +306,85 @@ namespace JetCode.FactoryData
                 writer.WriteLine("\t\t\t\tif(value == null)");
                 writer.WriteLine("\t\t\t\t\treturn;");
                 writer.WriteLine();
-                writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", item.LocalColumn, item.RemoteColumn);
-                foreach (KeyValuePair<string, string> pair in list)
+                foreach (FieldSchema item in list)
                 {
-                    writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", pair.Value, pair.Key);
+                    writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", item.Alias, item.Name);
                 }
                 writer.WriteLine("\t\t\t}");
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
             }
 
-            //Table Name
-            writer.WriteLine("\t\tpublic override string TableName");
-            writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tget");
-            writer.WriteLine("\t\t\t{");
-            writer.WriteLine("\t\t\t\treturn \"{0}\";", obj.Alias);
-            writer.WriteLine("\t\t\t}");
-            writer.WriteLine("\t\t}");
-            writer.WriteLine();
+            //Local Parent
+            foreach (ParentSchema item in obj.Parents)
+            {
+                if (joinedParents.ContainsKey(item.Alias))
+                    continue;
+
+                writer.WriteLine("\t\tpublic virtual {0}Data {0}", item.Alias);
+                writer.WriteLine("\t\t{");
+
+                writer.WriteLine("\t\t\tget");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\t{0}Data parent = new {0}Data();", item.Alias);
+                writer.WriteLine("\t\t\t\tparent.{0} = this.{1};", item.RemoteColumn, item.LocalColumn);
+                writer.WriteLine("\t\t\t\treturn parent;");
+                writer.WriteLine("\t\t\t}");
+
+                writer.WriteLine("\t\t\tset");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\tif(value == null)");
+                writer.WriteLine("\t\t\t\t\treturn;");
+                writer.WriteLine();
+                writer.WriteLine("\t\t\t\tthis.{0} = value.{1};", item.LocalColumn, item.RemoteColumn);
+                writer.WriteLine("\t\t\t}");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+            }
 
             writer.WriteLine("\t\t#endregion");
             writer.WriteLine();
         }
 
-        private SortedList<string, string> GetJoinedParentField(ObjectSchema obj, ParentSchema parent)
+        private SortedList<string, List<FieldSchema>> GetJoinedParents(ObjectSchema obj)
         {
-            SortedList<string, string> retList = new SortedList<string, string>();
+            
+            SortedList<string, List<FieldSchema>> retIndex = new SortedList<string, List<FieldSchema>>();
             foreach (FieldSchema item in obj.Fields)
             {
-                if(!item.IsJoined)
+                if (!item.IsJoined)
                     continue;
 
-                if(item.TableAlias != parent.Alias)
+                FieldSchema parentPK = this.GetTablePK(item.TableAlias);
+                if(parentPK == null)
                     continue;
 
-                retList.Add(item.Name, item.Alias);
+                if (!retIndex.ContainsKey(item.TableAlias))
+                {
+                    retIndex.Add(item.TableAlias, new List<FieldSchema>());
+                    retIndex[item.TableAlias].Add(parentPK);
+                }
+
+                if (parentPK.Name != item.Name)
+                {
+                    retIndex[item.TableAlias].Add(item);
+                }
             }
 
-            return retList;
+            return retIndex;
+        }
+
+        private FieldSchema GetTablePK(string tableName)
+        {
+            ObjectSchema obj = base.GetObjectByName(tableName);
+            if (obj == null)
+                return null;
+
+            List<FieldSchema> fields = obj.GetPKList();
+            if (fields.Count != 1)
+                return null;
+
+            return fields[0];
         }
 
         private void WriteItemCopyFromMethod(StringWriter writer, ObjectSchema obj)
