@@ -456,6 +456,9 @@ namespace JetCode.FactoryData
                 if(type == typeof(byte[]))
                     continue;
 
+                if(field.IsJoined)
+                    continue;
+
                 if (field.Name == "CreatedOn" || field.Name == "CreatedBy" || field.Name == "ModifiedOn" || field.Name == "ModifiedBy")
                     continue;
 
