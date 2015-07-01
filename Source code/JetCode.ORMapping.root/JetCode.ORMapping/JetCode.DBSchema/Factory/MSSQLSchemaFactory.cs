@@ -141,7 +141,7 @@ namespace JetCode.DBSchema.Factory
             }
         }
 
-        private void LoadTableIndexes(string tableName, DBIndexSchemaCollection list)
+        private void LoadTableIndexes_old(string tableName, DBIndexSchemaCollection list)
         {
             string sql = string.Format("sp_MShelpindex N'{0}', null, 1", tableName);
 
@@ -173,5 +173,41 @@ namespace JetCode.DBSchema.Factory
             }
         }
 
+        private void LoadTableIndexes(string tableName, DBIndexSchemaCollection list)
+        {
+            string sql = string.Format("sp_helpindex N'{0}'", tableName);
+
+            DataTable table = this.GetDataTabe(sql);
+            foreach (DataRow row in table.Rows)
+            {
+                DBIndexSchema schema = new DBIndexSchema(row["index_name"].ToString());
+                string description = row["index_description"].ToString();
+                if (description.Contains("primary key"))
+                {
+                    schema.IsPrimaryKey = true;
+                }
+                else
+                {
+                    if (description.Contains("unique"))
+                    {
+                        schema.IsUniqueConstraint = true;
+                    }
+                }
+              
+              
+
+                string keys = row["index_keys"].ToString();
+                string[] splits = keys.Split(',');
+                foreach (string split in splits)
+                {
+                    if(string.IsNullOrEmpty(split))
+                        continue;
+
+                    schema.Keys.Add(split.Trim());
+                }
+               
+                list.Add(schema);
+            }
+        }
     }
 }
