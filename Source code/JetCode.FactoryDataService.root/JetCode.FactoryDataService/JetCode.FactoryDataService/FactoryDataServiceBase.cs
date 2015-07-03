@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using JetCode.BizSchema;
@@ -300,8 +301,20 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\t\tif(data == null)");
             writer.WriteLine("\t\t\t\treturn;");
             writer.WriteLine();
+
+            SortedList<string, ChildSchema> index = new SortedList<string, ChildSchema>();
             foreach (ChildSchema child in obj.Children)
             {
+                if(index.ContainsKey(child.Alias))
+                    continue;
+
+                index.Add(child.Alias, child);
+            }
+
+            foreach (KeyValuePair<string, ChildSchema> pair in index)
+            {
+                ChildSchema child = pair.Value;
+
                 writer.WriteLine("\t\t\tif (data.{0}List != null)", child.Alias);
                 writer.WriteLine("\t\t\t{");
                 writer.WriteLine("\t\t\t\t this.Get{0}DataServiceBase(base.SecurityToken).SaveUnderTransaction(data.{0}List);", child.Alias);
