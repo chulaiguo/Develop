@@ -65,6 +65,7 @@
     <Compile Include="FactoryHelperSyncDataFixture.cs" />
     <Compile Include="FactoryHelperCacheFixture.cs" />
     <Compile Include="FactorySyncCacheFixture.cs" />
+    <Compile Include="FactoryLogFixture.cs" />
     <Compile Include="FactoryUpdateCacheFixture.cs" />
     <Compile Include="FactoryLinkSyncInsertFixture.cs" />
     <Compile Include="FactoryLinkDBFixture.cs" />

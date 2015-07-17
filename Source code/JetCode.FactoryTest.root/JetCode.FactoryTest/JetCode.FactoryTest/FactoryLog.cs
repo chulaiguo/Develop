@@ -5,9 +5,9 @@ using JetCode.Factory;
 
 namespace JetCode.FactoryTest
 {
-    public class FactoryLog : FactoryBase
+    public class FactoryUpdateCache : FactoryBase
     {
-        public FactoryLog(MappingSchema mappingSchema)
+        public FactoryUpdateCache(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -21,7 +21,7 @@ namespace JetCode.FactoryTest
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.DBLog", base.ProjectName);
+            writer.WriteLine("namespace {0}.UpdateCache", base.ProjectName);
             writer.WriteLine("{");
         }
 
@@ -32,17 +32,17 @@ namespace JetCode.FactoryTest
 
         protected override void WriteContent(StringWriter writer)
         {
-            writer.WriteLine("\tpublic class DBEditLog : IDBEditLog");
+            writer.WriteLine("\tpublic static class LogChanged");
             writer.WriteLine("\t{");
 
-            writer.WriteLine("\t\tpublic int LogDelete(BusinessBase entity, SecurityToken token)");
+            writer.WriteLine("\t\tpublic static void RecordLog(BusinessBase entity, string changeType, DateTime changeTime)");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tswitch (entity.TableName)");
             writer.WriteLine("\t\t\t{");
             SortedList<string, ObjectSchema> index = new SortedList<string, ObjectSchema>();
             foreach (ObjectSchema item in base.MappingSchema.Objects)
             {
-                if (item.Alias.StartsWith("Log"))
+                if (item.Alias.StartsWith("Log") || item.Alias.StartsWith("ZZ"))
                     continue;
 
                 if(index.ContainsKey(item.Alias))
@@ -58,7 +58,7 @@ namespace JetCode.FactoryTest
                 writer.WriteLine("\t\t\t\t\t{0}Data data = entity as {0}Data;", pair.Key);
                 writer.WriteLine("\t\t\t\t\tif (data != null)");
                 writer.WriteLine("\t\t\t\t\t{");
-                writer.WriteLine("\t\t\t\t\t\tInsertDeleteLog(data, data.StrStorePK, token);");
+                writer.WriteLine("\t\t\t\t\t\tUpdateLog(data.BDBuildingPK, entity.TableName, changeType, changeTime);");
                 writer.WriteLine("\t\t\t\t\t}");
                 writer.WriteLine("\t\t\t\t}");
                 writer.WriteLine("\t\t\t\tbreak;"); 

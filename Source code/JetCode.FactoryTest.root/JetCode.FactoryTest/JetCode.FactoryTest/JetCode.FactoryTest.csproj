@@ -57,6 +57,7 @@
     <Compile Include="FactoryHelperSyncData.cs" />
     <Compile Include="FactoryHelperCache.cs" />
     <Compile Include="FactorySyncCache.cs" />
+    <Compile Include="FactoryLog.cs" />
     <Compile Include="FactoryUpdateCacheList.cs" />
     <Compile Include="FactoryLinkSyncInsert.cs" />
     <Compile Include="FactoryLinkDB.cs" />
