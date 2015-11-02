@@ -7,8 +7,8 @@
     <ProjectGuid>{F73F2BDB-3628-4045-AE18-31C347067708}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JetCode.FactoryNativeServiceFixture</RootNamespace>
-    <AssemblyName>JetCode.FactoryNativeServiceFixture</AssemblyName>
+    <RootNamespace>JetCode.FactoryOnpremisesServiceFixture</RootNamespace>
+    <AssemblyName>JetCode.FactoryOnpremisesServiceFixture</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -50,16 +50,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FactoryNativeGatewayServiceFixture.cs" />
-    <Compile Include="FactoryNativeServiceFixture.cs" />
-    <Compile Include="FactoryNativeServiceInterfaceFixture.cs" />
-    <Compile Include="FactoryNativeServiceWrapperFixture.cs" />
+    <Compile Include="FactoryOnpremisesGatewayServiceFixture.cs" />
+    <Compile Include="FactoryOnpremisesServiceFixture.cs" />
+    <Compile Include="FactoryOnpremisesServiceInterfaceFixture.cs" />
+    <Compile Include="FactoryOnpremisesServiceWrapperFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JetCode.FactoryNativeService\JetCode.FactoryNativeService.csproj">
+    <ProjectReference Include="..\JetCode.FactoryOnpremisesService\JetCode.FactoryOnpremisesService.csproj">
       <Project>{0b051d8f-9a8c-40b2-9fd1-8a1461972e70}</Project>
-      <Name>JetCode.FactoryNativeService</Name>
+      <Name>JetCode.FactoryOnpremisesService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

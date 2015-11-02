@@ -4,11 +4,11 @@ using System.IO;
 using JetCode.BizSchema;
 using JetCode.Factory;
 
-namespace JetCode.FactoryNativeService
+namespace JetCode.FactoryOnpremisesService
 {
-    public class FactoryNativeServiceInterface : FactoryBase
+    public class FactoryOnpremisesServiceInterface : FactoryBase
     {
-        public FactoryNativeServiceInterface(MappingSchema mappingSchema)
+        public FactoryOnpremisesServiceInterface(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -19,9 +19,9 @@ namespace JetCode.FactoryNativeService
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.INativeService", base.ProjectName);
+            writer.WriteLine("namespace {0}.IOnpremisesService", base.ProjectName);
             writer.WriteLine("{");
-            writer.WriteLine("\tpublic interface INativeServiceFactory");
+            writer.WriteLine("\tpublic interface IOnpremisesServiceFactory");
             writer.WriteLine("\t{");
         }
 
@@ -33,7 +33,7 @@ namespace JetCode.FactoryNativeService
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.NativeService.dll", base.ProjectName);
+            string dllName = string.Format("{0}.OnpremisesService.dll", base.ProjectName);
             SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {

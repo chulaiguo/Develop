@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("JetCode.FactoryNativeService")]
+[assembly: AssemblyTitle("JetCode.FactoryOnpremisesServiceFixture")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("JetCode.FactoryNativeService")]
+[assembly: AssemblyProduct("JetCode.FactoryOnpremisesServiceFixture")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("94909b88-4c89-4f4e-94a0-7955b2ec0a4b")]
+[assembly: Guid("f9492704-eba8-4cfd-ab64-8acd4357b5cd")]
 
 // Version information for an assembly consists of the following four values:
 //

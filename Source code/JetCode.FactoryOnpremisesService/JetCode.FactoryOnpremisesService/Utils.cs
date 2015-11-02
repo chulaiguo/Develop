@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 
-namespace JetCode.FactoryNativeService
+namespace JetCode.FactoryOnpremisesService
 {
     public static class Utils
     {

@@ -6,11 +6,11 @@ using System.Text;
 using JetCode.BizSchema;
 using JetCode.Factory;
 
-namespace JetCode.FactoryNativeService
+namespace JetCode.FactoryOnpremisesService
 {
-    public class FactoryNativeServiceWrapper : FactoryBase
+    public class FactoryOnpremisesServiceWrapper : FactoryBase
     {
-        public FactoryNativeServiceWrapper(MappingSchema mappingSchema)
+        public FactoryOnpremisesServiceWrapper(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -20,14 +20,14 @@ namespace JetCode.FactoryNativeService
             writer.WriteLine("using System;");
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using {0}.Data;", base.ProjectName);
-            writer.WriteLine("using {0}.INativeService;", base.ProjectName);
+            writer.WriteLine("using {0}.IOnpremisesService;", base.ProjectName);
 
             writer.WriteLine();
         }
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.NativeServiceWrapper", base.ProjectName);
+            writer.WriteLine("namespace {0}.OnpremisesServiceWrapper", base.ProjectName);
             writer.WriteLine("{");
         }
 
@@ -38,7 +38,7 @@ namespace JetCode.FactoryNativeService
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.NativeService.dll", base.ProjectName);
+            string dllName = string.Format("{0}.OnpremisesService.dll", base.ProjectName);
             SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {
@@ -55,7 +55,7 @@ namespace JetCode.FactoryNativeService
                     writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token)",
                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
-                    writer.WriteLine("\t\t\treturn {0}(NativeServiceBuilder.GetFactory(), {1});", info.Name, this.GetInvokeParas(info));
+                    writer.WriteLine("\t\t\treturn {0}(OnpremisesServiceBuilder.GetFactory(), {1});", info.Name, this.GetInvokeParas(info));
                     writer.WriteLine("\t\t}");
                     writer.WriteLine();
 
@@ -64,13 +64,13 @@ namespace JetCode.FactoryNativeService
                         writer.WriteLine("\t\tpublic static {0} {1}({2} string _server_location_, SecurityToken token)",
                             info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                         writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\treturn {0}(NativeServiceBuilder.GetFactory(_server_location_), {1});",
+                        writer.WriteLine("\t\t\treturn {0}(OnpremisesServiceBuilder.GetFactory(_server_location_), {1});",
                             info.Name, this.GetInvokeParas(info));
                         writer.WriteLine("\t\t}");
                         writer.WriteLine();
                     }
 
-                    writer.WriteLine("\t\tprivate static {0} {1}(INativeServiceFactory factory, {2} SecurityToken token)",
+                    writer.WriteLine("\t\tprivate static {0} {1}(IOnpremisesServiceFactory factory, {2} SecurityToken token)",
                         info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
 
@@ -95,7 +95,7 @@ namespace JetCode.FactoryNativeService
                     writer.WriteLine("\t\t\tSecurityToken _token_ = SecurityToken.CreateFrameworkToken(token, paraNames, paraValues);");
                     writer.WriteLine();
 
-                    writer.WriteLine("\t\t\tbyte[] _data_ = factory.Get{0}Result(\"{1}\", NativeServiceBuilder.Serialize(_token_));", className, info.Name);
+                    writer.WriteLine("\t\t\tbyte[] _data_ = factory.Get{0}Result(\"{1}\", OnpremisesServiceBuilder.Serialize(_token_));", className, info.Name);
                     if (info.ReturnType.IsValueType)
                     {
                         writer.WriteLine("\t\t\t{0} _result_ =  ({0})Compression.DecompressToObject(_data_);", info.ReturnType.FullName);
@@ -133,7 +133,7 @@ namespace JetCode.FactoryNativeService
 
         private void WriteBasicServiceBuilder(StringWriter writer)
         {
-            writer.WriteLine("\tinternal static class NativeServiceBuilder");
+            writer.WriteLine("\tinternal static class OnpremisesServiceBuilder");
             writer.WriteLine("\t{");
             writer.WriteLine("\t\tinternal static byte[] Serialize(object obj)");
             writer.WriteLine("\t\t{");
@@ -144,14 +144,14 @@ namespace JetCode.FactoryNativeService
             writer.WriteLine("\t\t\t}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
-            writer.WriteLine("\t\tinternal static INativeServiceFactory GetFactory()");
+            writer.WriteLine("\t\tinternal static IOnpremisesServiceFactory GetFactory()");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treturn (INativeServiceFactory) Cheke.ClassFactory.ClassBuilder.GetFactory(\"{0}.NativeServiceFactory\");", base.ProjectName);
+            writer.WriteLine("\t\t\treturn (IOnpremisesServiceFactory) Cheke.ClassFactory.ClassBuilder.GetFactory(\"{0}.OnpremisesServiceFactory\");", base.ProjectName);
             writer.WriteLine("\t\t}");
             writer.WriteLine();
-            writer.WriteLine("\t\tinternal static INativeServiceFactory GetFactory(string location)");
+            writer.WriteLine("\t\tinternal static IOnpremisesServiceFactory GetFactory(string location)");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treturn Activator.GetObject(typeof(INativeServiceFactory), location) as INativeServiceFactory;");
+            writer.WriteLine("\t\t\treturn Activator.GetObject(typeof(IOnpremisesServiceFactory), location) as IOnpremisesServiceFactory;");
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}");
         }

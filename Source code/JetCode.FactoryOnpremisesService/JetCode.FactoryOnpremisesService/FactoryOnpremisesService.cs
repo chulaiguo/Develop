@@ -6,11 +6,11 @@ using System.Text;
 using JetCode.BizSchema;
 using JetCode.Factory;
 
-namespace JetCode.FactoryNativeService
+namespace JetCode.FactoryOnpremisesService
 {
-    public class FactoryNativeService : FactoryBase
+    public class FactoryOnpremisesService : FactoryBase
     {
-        public FactoryNativeService(MappingSchema mappingSchema)
+        public FactoryOnpremisesService(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -21,16 +21,16 @@ namespace JetCode.FactoryNativeService
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using {0}.Data;", base.ProjectName);
             writer.WriteLine("using {0}.BizData;", base.ProjectName);
-            writer.WriteLine("using {0}.INativeService;", base.ProjectName);
+            writer.WriteLine("using {0}.IOnpremisesService;", base.ProjectName);
 
             writer.WriteLine();
         }
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.NativeService", base.ProjectName);
+            writer.WriteLine("namespace {0}.OnpremisesService", base.ProjectName);
             writer.WriteLine("{");
-            writer.WriteLine("\tpublic class NativeServiceFactory: MarshalByRefObject, INativeServiceFactory");
+            writer.WriteLine("\tpublic class OnpremisesServiceFactory: MarshalByRefObject, IOnpremisesServiceFactory");
             writer.WriteLine("\t{");
         }
 
@@ -42,7 +42,7 @@ namespace JetCode.FactoryNativeService
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.NativeService.dll", base.ProjectName);
+            string dllName = string.Format("{0}.OnpremisesService.dll", base.ProjectName);
             SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {

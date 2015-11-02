@@ -7,8 +7,8 @@
     <ProjectGuid>{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JetCode.FactoryNativeService</RootNamespace>
-    <AssemblyName>JetCode.FactoryNativeService</AssemblyName>
+    <RootNamespace>JetCode.FactoryOnpremisesService</RootNamespace>
+    <AssemblyName>JetCode.FactoryOnpremisesService</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,10 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FactoryNativeGatewayService.cs" />
-    <Compile Include="FactoryNativeService.cs" />
-    <Compile Include="FactoryNativeServiceInterface.cs" />
-    <Compile Include="FactoryNativeServiceWrapper.cs" />
+    <Compile Include="FactoryOnpremisesGatewayService.cs" />
+    <Compile Include="FactoryOnpremisesService.cs" />
+    <Compile Include="FactoryOnpremisesServiceInterface.cs" />
+    <Compile Include="FactoryOnpremisesServiceWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
