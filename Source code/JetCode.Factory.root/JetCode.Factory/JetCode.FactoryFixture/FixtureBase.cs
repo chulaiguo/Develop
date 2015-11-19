@@ -12,7 +12,7 @@ namespace JetCode.FactoryFixture
 {
     public class FixtureBase
     {
-        protected const string BasePath = @"F:\Tools\Factory";
+        protected const string BasePath = @"E:\Temp\Documents\Factory";
         private MappingSchema _mappingSchema = null;
 
         [TestFixtureSetUp]
