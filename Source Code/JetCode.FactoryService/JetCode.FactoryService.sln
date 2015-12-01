@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryOnpremisesService", "JetCode.FactoryOnpremisesService\JetCode.FactoryOnpremisesService.csproj", "{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryService", "JetCode.FactoryService\JetCode.FactoryService.csproj", "{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryOnpremisesServiceFixture", "JetCode.FactoryOnpremisesServiceFixture\JetCode.FactoryOnpremisesServiceFixture.csproj", "{F73F2BDB-3628-4045-AE18-31C347067708}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryServiceFixture", "JetCode.FactoryServiceFixture\JetCode.FactoryServiceFixture.csproj", "{F73F2BDB-3628-4045-AE18-31C347067708}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

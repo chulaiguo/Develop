@@ -6,11 +6,11 @@ using System.Text;
 using JetCode.BizSchema;
 using JetCode.Factory;
 
-namespace JetCode.FactoryOnpremisesService
+namespace JetCode.FactoryService
 {
-    public class FactoryOnpremisesService : FactoryBase
+    public class FactoryService : FactoryBase
     {
-        public FactoryOnpremisesService(MappingSchema mappingSchema)
+        public FactoryService(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -21,16 +21,16 @@ namespace JetCode.FactoryOnpremisesService
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using {0}.Data;", base.ProjectName);
             writer.WriteLine("using {0}.BizData;", base.ProjectName);
-            writer.WriteLine("using {0}.IOnpremisesService;", base.ProjectName);
+            writer.WriteLine("using {0}.I{1}Service;", base.ProjectName, Utils._ServiceName);
 
             writer.WriteLine();
         }
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.OnpremisesService", base.ProjectName);
+            writer.WriteLine("namespace {0}.{1}Service", base.ProjectName, Utils._ServiceName);
             writer.WriteLine("{");
-            writer.WriteLine("\tpublic class OnpremisesServiceFactory: MarshalByRefObject, IOnpremisesServiceFactory");
+            writer.WriteLine("\tpublic class {0}ServiceFactory: MarshalByRefObject, I{0}ServiceFactory", Utils._ServiceName);
             writer.WriteLine("\t{");
         }
 
@@ -42,7 +42,7 @@ namespace JetCode.FactoryOnpremisesService
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.OnpremisesService.dll", base.ProjectName);
+            string dllName = string.Format("{0}.{1}Service.dll", base.ProjectName, Utils._ServiceName);
             SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {

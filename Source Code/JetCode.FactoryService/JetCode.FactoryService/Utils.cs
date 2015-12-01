@@ -4,10 +4,12 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 
-namespace JetCode.FactoryOnpremisesService
+namespace JetCode.FactoryService
 {
     public static class Utils
     {
+        public const string _ServiceName = "LocalFile";
+         
         public static SortedList<string, Type> GetTypeList(string projectName, string dllName)
         {
             SortedList<string, Type> retList = new SortedList<string, Type>();

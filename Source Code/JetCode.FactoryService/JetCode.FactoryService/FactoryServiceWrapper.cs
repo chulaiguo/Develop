@@ -6,11 +6,11 @@ using System.Text;
 using JetCode.BizSchema;
 using JetCode.Factory;
 
-namespace JetCode.FactoryOnpremisesService
+namespace JetCode.FactoryService
 {
-    public class FactoryOnpremisesServiceWrapper : FactoryBase
+    public class FactoryServiceWrapper : FactoryBase
     {
-        public FactoryOnpremisesServiceWrapper(MappingSchema mappingSchema)
+        public FactoryServiceWrapper(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -20,14 +20,14 @@ namespace JetCode.FactoryOnpremisesService
             writer.WriteLine("using System;");
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using {0}.Data;", base.ProjectName);
-            writer.WriteLine("using {0}.IOnpremisesService;", base.ProjectName);
+            writer.WriteLine("using {0}.I{1}Service;", base.ProjectName, Utils._ServiceName);
 
             writer.WriteLine();
         }
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.OnpremisesServiceWrapper", base.ProjectName);
+            writer.WriteLine("namespace {0}.{1}ServiceWrapper", base.ProjectName, Utils._ServiceName);
             writer.WriteLine("{");
         }
 
@@ -38,7 +38,7 @@ namespace JetCode.FactoryOnpremisesService
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.OnpremisesService.dll", base.ProjectName);
+            string dllName = string.Format("{0}.{1}Service.dll", base.ProjectName, Utils._ServiceName);
             SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {
@@ -55,7 +55,7 @@ namespace JetCode.FactoryOnpremisesService
                     writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token)",
                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
-                    writer.WriteLine("\t\t\treturn {0}(OnpremisesServiceBuilder.GetFactory(), {1});", info.Name, this.GetInvokeParas(info));
+                    writer.WriteLine("\t\t\treturn {0}({2}ServiceBuilder.GetFactory(), {1});", info.Name, this.GetInvokeParas(info), Utils._ServiceName);
                     writer.WriteLine("\t\t}");
                     writer.WriteLine();
 
@@ -64,14 +64,14 @@ namespace JetCode.FactoryOnpremisesService
                         writer.WriteLine("\t\tpublic static {0} {1}({2} string _server_location_, SecurityToken token)",
                             info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                         writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\treturn {0}(OnpremisesServiceBuilder.GetFactory(_server_location_), {1});",
-                            info.Name, this.GetInvokeParas(info));
+                        writer.WriteLine("\t\t\treturn {0}({2}ServiceBuilder.GetFactory(_server_location_), {1});",
+                            info.Name, this.GetInvokeParas(info), Utils._ServiceName);
                         writer.WriteLine("\t\t}");
                         writer.WriteLine();
                     }
 
-                    writer.WriteLine("\t\tprivate static {0} {1}(IOnpremisesServiceFactory factory, {2} SecurityToken token)",
-                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
+                    writer.WriteLine("\t\tprivate static {0} {1}(I{3}ServiceFactory factory, {2} SecurityToken token)",
+                        info.ReturnType.FullName, info.Name, this.GetInputParas(info), Utils._ServiceName);
                     writer.WriteLine("\t\t{");
 
                     ParameterInfo[] paraList = info.GetParameters();
@@ -95,7 +95,7 @@ namespace JetCode.FactoryOnpremisesService
                     writer.WriteLine("\t\t\tSecurityToken _token_ = SecurityToken.CreateFrameworkToken(token, paraNames, paraValues);");
                     writer.WriteLine();
 
-                    writer.WriteLine("\t\t\tbyte[] _data_ = factory.Get{0}Result(\"{1}\", OnpremisesServiceBuilder.Serialize(_token_));", className, info.Name);
+                    writer.WriteLine("\t\t\tbyte[] _data_ = factory.Get{0}Result(\"{1}\", {2}ServiceBuilder.Serialize(_token_));", className, info.Name, Utils._ServiceName);
                     if (info.ReturnType.IsValueType)
                     {
                         writer.WriteLine("\t\t\t{0} _result_ =  ({0})Compression.DecompressToObject(_data_);", info.ReturnType.FullName);
@@ -133,7 +133,7 @@ namespace JetCode.FactoryOnpremisesService
 
         private void WriteBasicServiceBuilder(StringWriter writer)
         {
-            writer.WriteLine("\tinternal static class OnpremisesServiceBuilder");
+            writer.WriteLine("\tinternal static class {0}ServiceBuilder", Utils._ServiceName);
             writer.WriteLine("\t{");
             writer.WriteLine("\t\tinternal static byte[] Serialize(object obj)");
             writer.WriteLine("\t\t{");
@@ -144,14 +144,14 @@ namespace JetCode.FactoryOnpremisesService
             writer.WriteLine("\t\t\t}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
-            writer.WriteLine("\t\tinternal static IOnpremisesServiceFactory GetFactory()");
+            writer.WriteLine("\t\tinternal static I{0}ServiceFactory GetFactory()", Utils._ServiceName);
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treturn (IOnpremisesServiceFactory) Cheke.ClassFactory.ClassBuilder.GetFactory(\"{0}.OnpremisesServiceFactory\");", base.ProjectName);
+            writer.WriteLine("\t\t\treturn (I{1}ServiceFactory) Cheke.ClassFactory.ClassBuilder.GetFactory(\"{0}.{1}ServiceFactory\");", base.ProjectName, Utils._ServiceName);
             writer.WriteLine("\t\t}");
             writer.WriteLine();
-            writer.WriteLine("\t\tinternal static IOnpremisesServiceFactory GetFactory(string location)");
+            writer.WriteLine("\t\tinternal static I{0}ServiceFactory GetFactory(string location)", Utils._ServiceName);
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\treturn Activator.GetObject(typeof(IOnpremisesServiceFactory), location) as IOnpremisesServiceFactory;");
+            writer.WriteLine("\t\t\treturn Activator.GetObject(typeof(I{0}ServiceFactory), location) as I{0}ServiceFactory;", Utils._ServiceName);
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}");
         }
