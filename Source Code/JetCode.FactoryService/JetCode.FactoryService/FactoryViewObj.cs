@@ -40,14 +40,14 @@ namespace JetCode.FactoryService
         {
             string dllName = string.Format("{0}.{1}Service.dll", base.ProjectName, Utils._ServiceName);
             SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            writer.WriteLine("\tpublic static class Biz{0}", Utils._ServiceName);
+            writer.WriteLine("\t{");
             foreach (KeyValuePair<string, Type> item in typeList)
             {
                 if (!item.Key.StartsWith("Biz"))
                     continue;
 
                 string className = item.Key.Substring(0, item.Key.Length - 7);//BizCreatorService
-                writer.WriteLine("\tpublic static class {0}", className);
-                writer.WriteLine("\t{");
 
                 MethodInfo[] list = item.Value.GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
                 foreach (MethodInfo info in list)
@@ -57,10 +57,8 @@ namespace JetCode.FactoryService
                     this.CreateMethodWithToken(writer, info, className);
                     writer.WriteLine();
                 }
-
-                writer.WriteLine("\t}");
-                writer.WriteLine();
             }
+            writer.WriteLine("\t}");
         }
 
         private void CreateMethod(StringWriter writer, MethodInfo info)
