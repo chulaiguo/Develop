@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryViewObj.cs" />
     <Compile Include="FactoryGatewayService.cs" />
     <Compile Include="FactoryService.cs" />
     <Compile Include="FactoryServiceInterface.cs" />
