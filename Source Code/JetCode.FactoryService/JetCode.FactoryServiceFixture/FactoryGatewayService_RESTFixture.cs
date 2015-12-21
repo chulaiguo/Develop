@@ -34,7 +34,7 @@ namespace JetCode.FactoryServiceFixture
         {
             base.ClearSrcDirectory();
 
-            string fileName = string.Format(@"{0}\{1}GatewayService.cs", this.SrcDirectory, Utils._ServiceName);
+            string fileName = string.Format(@"{0}\{1}ServiceController.cs", this.SrcDirectory, Utils._ServiceName);
             FactoryGatewayService_REST detail = new FactoryGatewayService_REST(base.Schema);
             base.WriteToFile(fileName, detail);
         }

@@ -26,7 +26,7 @@ namespace JetCode.FactoryService
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}_{1}.WebAPI.Controllers", base.ProjectName, Utils._ServiceName);
+            writer.WriteLine("namespace {0}_OnPremises.WebAPI.Controllers", base.ProjectName);
             writer.WriteLine("{");
         }
 
@@ -54,7 +54,7 @@ namespace JetCode.FactoryService
                 writer.WriteLine("\t\t{");
                 writer.WriteLine("\t\t\tbyte[] token  = this.Request.Content.ReadAsByteArrayAsync().Result;");
                 writer.WriteLine();
-                writer.WriteLine("\t\t\tFacadeServiceFactory factory = new FacadeServiceFactory();");
+                writer.WriteLine("\t\t\t{0}ServiceFactory factory = new {0}ServiceFactory();", Utils._ServiceName);
                 writer.WriteLine("\t\t\tbyte[] data = factory.Get{0}Result(actionName, token);", className);
                 writer.WriteLine();
                 writer.WriteLine("\t\t\tHttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);");
