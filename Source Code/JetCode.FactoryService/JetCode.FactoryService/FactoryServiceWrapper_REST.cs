@@ -80,7 +80,7 @@ namespace JetCode.FactoryService
 
                     writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}_{1}:BaseAddress\"];", this.ProjectName, Utils._ServiceName);
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
-                    writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/FacadeService/\", baseAddress.TrimEnd('/')));");
+                    writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{{0}}/{0}Service/\", baseAddress.TrimEnd('/')));", Utils._ServiceName);
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"image/jpg\"));");
                     writer.WriteLine();
                     writer.WriteLine("\t\t\tHttpContent content = new ByteArrayContent({0}ServiceHelper.Serialize(_token_));", Utils._ServiceName);

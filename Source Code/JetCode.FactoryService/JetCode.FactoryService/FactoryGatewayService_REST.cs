@@ -26,7 +26,7 @@ namespace JetCode.FactoryService
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.WebAPI.Controllers", base.ProjectName);
+            writer.WriteLine("namespace {0}_{1}.WebAPI.Controllers", base.ProjectName, Utils._ServiceName);
             writer.WriteLine("{");
         }
 
