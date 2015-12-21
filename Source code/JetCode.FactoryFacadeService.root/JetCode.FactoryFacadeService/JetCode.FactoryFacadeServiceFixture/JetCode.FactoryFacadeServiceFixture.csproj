@@ -53,10 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryFacadeGatewayService_RESTFixture.cs" />
     <Compile Include="FactoryFacadeGatewayServiceFixture.cs" />
     <Compile Include="FactoryFacadeServiceViewObjFixture.cs" />
     <Compile Include="FactoryFacadeServiceFixture.cs" />
     <Compile Include="FactoryFacadeServiceInterfaceFixture.cs" />
+    <Compile Include="FactoryFacadeServiceWrapper_RESTFixture.cs" />
     <Compile Include="FactoryFacadeServiceWrapperFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

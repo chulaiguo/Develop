@@ -53,7 +53,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryBasicGatewayService_RESTFixture.cs" />
     <Compile Include="FactoryBasicGatewayServiceFixture.cs" />
+    <Compile Include="FactoryBasicServiceWrapper_RESTFixture.cs" />
     <Compile Include="FactoryBasicServiceWrapperFixture.cs" />
     <Compile Include="FactoryBasicServiceInterfaceFixture.cs" />
     <Compile Include="FactoryBasicServiceFixture.cs" />
