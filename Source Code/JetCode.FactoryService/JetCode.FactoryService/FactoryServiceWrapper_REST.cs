@@ -28,7 +28,7 @@ namespace JetCode.FactoryService
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.OnPremisesServiceWrapper", base.ProjectName);
+            writer.WriteLine("namespace {0}.{1}ServiceWrapper", base.ProjectName, Utils._ServiceName);
             writer.WriteLine("{");
         }
 
@@ -78,7 +78,7 @@ namespace JetCode.FactoryService
                     writer.WriteLine("\t\t\tSecurityToken _token_ = SecurityToken.CreateFrameworkToken(token, paraNames, paraValues);");
                     writer.WriteLine();
 
-                    writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}_OnPremises:BaseAddress\"];", this.ProjectName);
+                    writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}_{1}Service:BaseAddress\"];", this.ProjectName, Utils._ServiceName);
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
                     writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{{0}}/{0}Service/\", baseAddress.TrimEnd('/')));", Utils._ServiceName);
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"image/jpg\"));");

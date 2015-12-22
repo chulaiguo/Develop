@@ -8,7 +8,7 @@ namespace JetCode.FactoryService
 {
     public static class Utils
     {
-        public const string _ServiceName = "MAS";
+        public const string _ServiceName = "LocalFile";
          
         public static SortedList<string, Type> GetTypeList(string projectName, string dllName)
         {

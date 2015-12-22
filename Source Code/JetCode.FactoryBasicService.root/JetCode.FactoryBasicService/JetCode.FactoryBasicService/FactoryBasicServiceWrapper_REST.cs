@@ -76,7 +76,7 @@ namespace JetCode.FactoryBasicService
                     writer.WriteLine();
 
 
-                    writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}:BaseAddress\"];", this.ProjectName);
+                    writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}_BasicService:BaseAddress\"];", this.ProjectName);
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
                     writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/BasicService/\", baseAddress.TrimEnd('/')));");
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"image/jpg\"));");
