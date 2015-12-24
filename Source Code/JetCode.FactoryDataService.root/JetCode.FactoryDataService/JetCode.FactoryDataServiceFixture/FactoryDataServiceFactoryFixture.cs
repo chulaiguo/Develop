@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace JetCode.FactoryDataServiceFixture
 {
     [TestFixture]
-    public class FactoryDataServiceImplFixture : FixtureBase
+    public class FactoryDataServiceFactoryFixture : FixtureBase
     {
         [SetUp]
         public void SetUp()
@@ -25,7 +25,7 @@ namespace JetCode.FactoryDataServiceFixture
         [Test]
         public void WriteCodeToScreen()
         {
-            FactoryDataServiceImpl detail = new FactoryDataServiceImpl(base.Schema);
+            FactoryDataServiceFactory detail = new FactoryDataServiceFactory(base.Schema);
             base.WriteToScreen(detail);
         }
 
@@ -35,7 +35,7 @@ namespace JetCode.FactoryDataServiceFixture
             base.ClearSrcDirectory();
 
             string fileName = string.Format(@"{0}\DataService.cs", this.SrcDirectory);
-            FactoryDataServiceImpl detail = new FactoryDataServiceImpl(base.Schema);
+            FactoryDataServiceFactory detail = new FactoryDataServiceFactory(base.Schema);
             base.WriteToFile(fileName, detail);
         }
     }

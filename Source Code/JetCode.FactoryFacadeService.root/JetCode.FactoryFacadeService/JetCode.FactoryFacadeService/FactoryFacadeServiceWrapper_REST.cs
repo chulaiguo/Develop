@@ -87,7 +87,7 @@ namespace JetCode.FactoryFacadeService
                     writer.WriteLine("\t\t\tHttpResponseMessage res = client.PostAsync(\"Get{0}Result/{1}\", content).Result;", className, info.Name);
                     writer.WriteLine("\t\t\tif (!res.IsSuccessStatusCode)");
                     writer.WriteLine("\t\t\t{");
-                    writer.WriteLine("\t\t\t\tthrow new ApplicationException(string.Format(\"The server is currently busy, please try again late.(StatusCode ={0})\", res.StatusCode));");
+                    writer.WriteLine("\t\t\t\tthrow FacadeServiceHelper.DeserializeException(res.Content.ReadAsByteArrayAsync().Result);");
                     writer.WriteLine("\t\t\t}");
                     writer.WriteLine();
                     writer.WriteLine("\t\t\tbyte[] _data_ = res.Content.ReadAsByteArrayAsync().Result;");
@@ -137,6 +137,16 @@ namespace JetCode.FactoryFacadeService
             writer.WriteLine("\t\t\t\tnew System.Runtime.Serialization.Formatters.Binary.BinaryFormatter().Serialize(stream, obj);");
             writer.WriteLine("\t\t\t\treturn stream.ToArray();");
             writer.WriteLine("\t\t\t}");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine();
+            writer.WriteLine("\t\tinternal static Exception DeserializeException(byte[] data)");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tException result;");
+            writer.WriteLine("\t\t\tusing (System.IO.MemoryStream stream = new System.IO.MemoryStream(data))");
+            writer.WriteLine("\t\t\t{");
+            writer.WriteLine("\t\t\t\tresult = (new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter().Deserialize(stream) as Exception);");
+            writer.WriteLine("\t\t\t}");
+            writer.WriteLine("\t\t\treturn result;");
             writer.WriteLine("\t\t}");
             writer.WriteLine("\t}");
         }

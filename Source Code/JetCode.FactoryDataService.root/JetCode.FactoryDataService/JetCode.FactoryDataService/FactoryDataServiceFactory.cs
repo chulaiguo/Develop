@@ -4,9 +4,9 @@ using JetCode.Factory;
 
 namespace JetCode.FactoryDataService
 {
-    public class FactoryDataServiceImpl : FactoryBase
+    public class FactoryDataServiceFactory : FactoryBase
     {
-        public FactoryDataServiceImpl(MappingSchema mappingSchema)
+        public FactoryDataServiceFactory(MappingSchema mappingSchema)
             : base(mappingSchema)
         {
         }
@@ -20,7 +20,6 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("using Cheke.BusinessEntity;");
             writer.WriteLine("using {0}.Data;", this.ProjectName);
             writer.WriteLine("using {0}.DataServiceBase;", this.ProjectName);
-            writer.WriteLine("using {0}.IDataService;", this.ProjectName);
 
             writer.WriteLine();
         }
@@ -40,7 +39,7 @@ namespace JetCode.FactoryDataService
         {
             foreach (ObjectSchema item in base.MappingSchema.Objects)
             {
-                writer.WriteLine("\tpublic partial class {0}DataService : {0}DataServiceBase, I{0}DataService", item.Alias);
+                writer.WriteLine("\tpublic partial class {0}DataService : {0}DataServiceBase", item.Alias);
                 writer.WriteLine("\t{");
                 writer.WriteLine("\t\tpublic {0}DataService(string connectionString, SecurityToken token)", item.Alias);
                 writer.WriteLine("\t\t\t: base(connectionString, token)");

@@ -52,18 +52,41 @@ namespace JetCode.FactoryService
                 writer.WriteLine("\t\t[HttpPost]");
                 writer.WriteLine("\t\tpublic HttpResponseMessage Get{0}Result(string actionName)", className);
                 writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\tbyte[] token  = this.Request.Content.ReadAsByteArrayAsync().Result;");
+                writer.WriteLine("\t\t\ttry");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\tbyte[] token  = this.Request.Content.ReadAsByteArrayAsync().Result;");
                 writer.WriteLine();
-                writer.WriteLine("\t\t\t{0}ServiceFactory factory = new {0}ServiceFactory();", Utils._ServiceName);
-                writer.WriteLine("\t\t\tbyte[] data = factory.Get{0}Result(actionName, token);", className);
+                writer.WriteLine("\t\t\t\t{0}ServiceFactory factory = new {0}ServiceFactory();", Utils._ServiceName);
+                writer.WriteLine("\t\t\t\tbyte[] data = factory.Get{0}Result(actionName, token);", className);
                 writer.WriteLine();
-                writer.WriteLine("\t\t\tHttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);");
-                writer.WriteLine("\t\t\tres.Content = new ByteArrayContent(data);");
-                writer.WriteLine("\t\t\tres.Content.Headers.ContentType = new MediaTypeHeaderValue(\"image/jpg\");");
-                writer.WriteLine("\t\t\treturn res;");
+                writer.WriteLine("\t\t\t\tHttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);");
+                writer.WriteLine("\t\t\t\tres.Content = new ByteArrayContent(data);");
+                writer.WriteLine("\t\t\t\tres.Content.Headers.ContentType = new MediaTypeHeaderValue(\"image/jpg\");");
+                writer.WriteLine("\t\t\t\treturn res;");
+                writer.WriteLine("\t\t\t}");
+                writer.WriteLine("\t\t\tcatch (System.Exception ex)");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\treturn this.CreateExceptionResponse(ex);");
+                writer.WriteLine("\t\t\t}");
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
             }
+
+            writer.WriteLine("\t\tprivate HttpResponseMessage CreateExceptionResponse(System.Exception ex)");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tbyte[] data;");
+            writer.WriteLine("\t\t\tusing (System.IO.MemoryStream stream = new System.IO.MemoryStream())");
+            writer.WriteLine("\t\t\t{");
+            writer.WriteLine("\t\t\t\tnew System.Runtime.Serialization.Formatters.Binary.BinaryFormatter().Serialize(stream, ex);");
+            writer.WriteLine("\t\t\t\tdata = stream.ToArray();");
+            writer.WriteLine("\t\t\t}");
+            writer.WriteLine();
+            writer.WriteLine("\t\t\tHttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.InternalServerError);");
+            writer.WriteLine("\t\t\tres.Content = new ByteArrayContent(data);");
+            writer.WriteLine("\t\t\tres.Content.Headers.ContentType = new MediaTypeHeaderValue(\"image/jpg\");");
+            writer.WriteLine("\t\t\treturn res;");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine();
 
             writer.WriteLine("\t}");
             writer.WriteLine();

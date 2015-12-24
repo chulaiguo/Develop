@@ -63,12 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryDataServiceWrapperFixture.cs" />
     <Compile Include="FactoryDataServiceBaseFixture.cs" />
     <Compile Include="FactoryCRUDFixture.cs" />
     <Compile Include="FactoryGetByPageFixture.cs" />
     <Compile Include="FactoryGetByIndexFixture.cs" />
-    <Compile Include="FactoryDataServiceInterfaceFixture.cs" />
-    <Compile Include="FactoryDataServiceImplFixture.cs" />
+    <Compile Include="FactoryDataServiceFactoryFixture.cs" />
     <Compile Include="FactoryGetByMapFixture.cs" />
     <Compile Include="FactoryGetByUKFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

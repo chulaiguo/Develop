@@ -55,15 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryDataServiceWrapper.cs" />
     <Compile Include="FactoryDataServiceBase.cs" />
     <Compile Include="FactoryGetByPage.cs" />
     <Compile Include="FactoryGetByIndex.cs" />
     <Compile Include="FactoryGetByUK.cs" />
-    <Compile Include="FactoryDataServiceInterface.cs" />
-    <Compile Include="FactoryDataServiceImpl.cs" />
+    <Compile Include="FactoryDataServiceFactory.cs" />
     <Compile Include="FactoryGetByMap.cs" />
     <Compile Include="FactoryCRUD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
