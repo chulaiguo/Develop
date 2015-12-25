@@ -85,6 +85,11 @@ namespace JetCode.FactoryWebAPI
                     writer.WriteLine();
                     writer.WriteLine("\t\t\tHttpContent content = new ByteArrayContent({0}ServiceHelper.Serialize(_token_));", Utils._ServiceName);
                     writer.WriteLine("\t\t\tHttpResponseMessage res = client.PostAsync(\"Get{0}Result/{1}\", content).Result;", className, info.Name);
+                    writer.WriteLine("\t\t\tif (res.StatusCode == System.Net.HttpStatusCode.NotFound)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tthrow new Exception(\"The remote server returned an error: (404) Not Found\");");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine();
                     writer.WriteLine("\t\t\tif (!res.IsSuccessStatusCode)");
                     writer.WriteLine("\t\t\t{");
                     writer.WriteLine("\t\t\t\tthrow {0}ServiceHelper.DeserializeException(res.Content.ReadAsByteArrayAsync().Result);", Utils._ServiceName);
