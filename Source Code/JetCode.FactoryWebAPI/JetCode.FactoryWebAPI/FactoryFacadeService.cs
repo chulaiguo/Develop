@@ -80,7 +80,6 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\tprivate byte[] Get{0}Result(string actionName, byte[] paras)", className);
                 writer.WriteLine("\t\t{");
                 writer.WriteLine("\t\t\tCheke.SecurityToken token = this.DeserializeToken(paras);");
-                writer.WriteLine("\t\t\t{0}Service svr = new {0}Service(token);", className);
                 writer.WriteLine("\t\t\tswitch (actionName)");
                 writer.WriteLine("\t\t\t{");
 
@@ -92,7 +91,7 @@ namespace JetCode.FactoryWebAPI
                     if (pair.Value.Count == 1)
                     {
                         MethodInfo method = pair.Value[0];
-                        writer.WriteLine("\t\t\t\t\t{0} _result_  = svr.{1}({2});", method.ReturnType.FullName, pair.Key, this.GetInputParas(method));
+                        writer.WriteLine("\t\t\t\t\t{0} _result_  = {1}Wrapper.{2}({3});", method.ReturnType.FullName, className, pair.Key, this.GetInputParas(method));
                         if (method.ReturnType.IsValueType)
                         {
                             if (method.ReturnType == typeof(DateTime))
@@ -115,7 +114,7 @@ namespace JetCode.FactoryWebAPI
                         {
                             writer.WriteLine("\t\t\t\t\tif(token.ParameterNames == \"{0}\")", this.GetParaNameList(method));
                             writer.WriteLine("\t\t\t\t\t{");
-                            writer.WriteLine("\t\t\t\t\t\t{0} _result_  = svr.{1}({2});", method.ReturnType.FullName, pair.Key, this.GetInputParas(method));
+                            writer.WriteLine("\t\t\t\t\t\t{0} _result_  = {1}Wrapper.{2}({3});", method.ReturnType.FullName, className, pair.Key, this.GetInputParas(method));
                             if (method.ReturnType.IsValueType)
                             {
                                 if (method.ReturnType == typeof(DateTime))
@@ -221,7 +220,7 @@ namespace JetCode.FactoryWebAPI
                 }
             }
 
-            return builder.ToString().TrimEnd(',');
+            return string.Format("{0} token", builder);
         }
     }
 }

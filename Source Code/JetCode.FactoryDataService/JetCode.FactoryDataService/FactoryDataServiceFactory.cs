@@ -67,7 +67,7 @@ namespace JetCode.FactoryDataService
 
         private void WriteDataServiceFactory(StringWriter writer)
         {
-            writer.WriteLine("\tpublic static class DataServiceFactory");
+            writer.WriteLine("\tinternal static class DataServiceFactory");
             writer.WriteLine("\t{");
             writer.WriteLine("\t\tprivate static readonly string _ConnectionString = ConfigurationManager.AppSettings[\"DB:{0}\"];", base.ProjectName);
             writer.WriteLine();

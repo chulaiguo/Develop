@@ -54,8 +54,7 @@ namespace JetCode.FactoryRemoting
                 writer.WriteLine("\t\tpublic byte[] Get{0}Result(string actionName, byte[] paras)", className);
                 writer.WriteLine("\t\t{");
                 writer.WriteLine("\t\t\tSecurityToken token = this.DeserializeToken(paras);");
-                writer.WriteLine("\t\t\tDataService.DataServiceFactory.CheckAuthorize(token);");
-                writer.WriteLine("\t\t\t{0}DataService svr = DataService.DataServiceFactory.Create{0}DataService(token, false);", className);
+                writer.WriteLine("\t\t\t{0}Wrapper.CheckAuthorize(token);", className);
                 writer.WriteLine("\t\t\tswitch (actionName)");
                 writer.WriteLine("\t\t\t{");
 
@@ -67,7 +66,7 @@ namespace JetCode.FactoryRemoting
                     if (pair.Value.Count == 1)
                     {
                         MethodInfo method = pair.Value[0];
-                        writer.WriteLine("\t\t\t\t\t{0} _result_  = svr.{1}({2});", method.ReturnType.FullName, pair.Key, this.GetInputParas(method));
+                        writer.WriteLine("\t\t\t\t\t{0} _result_  = {1}Wrapper.{2}({3});", method.ReturnType.FullName, className, pair.Key, this.GetInputParas(method));
                         if (method.ReturnType.IsValueType)
                         {
                             if (method.ReturnType == typeof (DateTime))
@@ -90,7 +89,7 @@ namespace JetCode.FactoryRemoting
                         {
                             writer.WriteLine("\t\t\t\t\tif(token.ParameterNames == \"{0}\")", this.GetParaNameList(method));
                             writer.WriteLine("\t\t\t\t\t{");
-                            writer.WriteLine("\t\t\t\t\t\t{0} _result_  = svr.{1}({2});", method.ReturnType.FullName, pair.Key, this.GetInputParas(method));
+                            writer.WriteLine("\t\t\t\t\t\t{0} _result_  = {1}Wrapper.{2}({3});", method.ReturnType.FullName, className, pair.Key, this.GetInputParas(method));
                             if (method.ReturnType.IsValueType)
                             {
                                 if (method.ReturnType == typeof(DateTime))
@@ -200,7 +199,7 @@ namespace JetCode.FactoryRemoting
                 }
             }
 
-            return builder.ToString().TrimEnd(',');
+            return string.Format("{0} token", builder);
         }
     }
 }
