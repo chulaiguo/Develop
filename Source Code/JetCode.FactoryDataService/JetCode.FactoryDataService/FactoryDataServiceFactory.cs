@@ -15,7 +15,6 @@ namespace JetCode.FactoryDataService
         {
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Data;");
-            writer.WriteLine("using System.Configuration;");
             writer.WriteLine("using System.Security.Authentication;");
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using Cheke.Log;");
@@ -130,7 +129,7 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\tinternal static class DataServiceFactory");
             writer.WriteLine("\t{");
             writer.WriteLine("\t\tprivate static readonly Log.SysLog _Log = new Log.SysLog();");
-            writer.WriteLine("\t\tprivate static string _ConnectionString = ConfigurationManager.AppSettings[\"DB:{0}\"];", base.ProjectName);
+            writer.WriteLine("\t\tprivate static readonly string _ConnectionString = Configuration.ConfigurationManager.DB_{0};", base.ProjectName);
             writer.WriteLine();
             writer.WriteLine("\t\tpublic static Log.SysLog Log");
             writer.WriteLine("\t\t{");
