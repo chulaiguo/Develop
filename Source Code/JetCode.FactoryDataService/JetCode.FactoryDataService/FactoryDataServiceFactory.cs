@@ -139,7 +139,6 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic static string ConnectionString");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget { return _ConnectionString; }");
-            writer.WriteLine("\t\t\tset { _ConnectionString = value; }");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
             writer.WriteLine("\t\tpublic static void CheckAuthorize(SecurityToken token)");
