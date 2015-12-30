@@ -14,12 +14,15 @@ namespace JetCode.FactoryDataService
         protected override void WriteUsing(StringWriter writer)
         {
             writer.WriteLine("using System;");
+            writer.WriteLine("using System.Data;");
             writer.WriteLine("using System.Configuration;");
             writer.WriteLine("using System.Security.Authentication;");
             writer.WriteLine("using Cheke;");
+            writer.WriteLine("using Cheke.Log;");
             writer.WriteLine("using Cheke.BusinessEntity;");
             writer.WriteLine("using {0}.Data;", this.ProjectName);
             writer.WriteLine("using {0}.DataServiceBase;", this.ProjectName);
+            writer.WriteLine("using {0}.DataService.Utils;", this.ProjectName);
 
             writer.WriteLine();
         }
@@ -41,9 +44,66 @@ namespace JetCode.FactoryDataService
             {
                 writer.WriteLine("\tpublic partial class {0}DataService : {0}DataServiceBase", item.Alias);
                 writer.WriteLine("\t{");
-                writer.WriteLine("\t\tpublic {0}DataService(string connectionString, SecurityToken token)", item.Alias);
-                writer.WriteLine("\t\t\t: base(connectionString, token)");
+                writer.WriteLine("\t\tpublic {0}DataService(string connectionString, SecurityToken token, ISysLog log)", item.Alias);
+                writer.WriteLine("\t\t\t: base(connectionString, token, log)");
                 writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+
+                writer.WriteLine("\t\tprotected override bool IsLogInsertEnabled");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\tget { return true; }");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override bool IsLogUpdateEnabled");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\tget { return true; }");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override bool IsLogDeleteEnabled");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\tget { return true; }");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override int LogInsert(BusinessBase entity, SecurityToken token)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn DBLogHelper.LogInsert(entity, token);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override int LogUpdate(BusinessBase entity, SecurityToken token)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn DBLogHelper.LogUpdate(entity, token);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override int LogDelete(BusinessBase entity, SecurityToken token)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn DBLogHelper.LogDelete(entity, token);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override int LogDelete(DataTable table, SecurityToken token)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn DBLogHelper.LogDelete(table, token);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+
+                writer.WriteLine("\t\tprotected override bool Selectable(BusinessBase entity)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn FilterHelper.Selectable(entity, base.SecurityToken);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override bool Editable(BusinessBase entity)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn FilterHelper.Editable(entity, base.SecurityToken);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override bool Deletable(BusinessBase entity)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn FilterHelper.Deletable(entity, base.SecurityToken);");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+                writer.WriteLine("\t\tprotected override bool Insertable(BusinessBase entity)");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\treturn FilterHelper.Insertable(entity, base.SecurityToken);");
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
 
@@ -69,11 +129,18 @@ namespace JetCode.FactoryDataService
         {
             writer.WriteLine("\tinternal static class DataServiceFactory");
             writer.WriteLine("\t{");
-            writer.WriteLine("\t\tprivate static readonly string _ConnectionString = ConfigurationManager.AppSettings[\"DB:{0}\"];", base.ProjectName);
+            writer.WriteLine("\t\tprivate static readonly Log.SysLog _Log = new Log.SysLog();");
+            writer.WriteLine("\t\tprivate static string _ConnectionString = ConfigurationManager.AppSettings[\"DB:{0}\"];", base.ProjectName);
+            writer.WriteLine();
+            writer.WriteLine("\t\tpublic static Log.SysLog Log");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tget { return _Log; }");
+            writer.WriteLine("\t\t}");
             writer.WriteLine();
             writer.WriteLine("\t\tpublic static string ConnectionString");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget { return _ConnectionString; }");
+            writer.WriteLine("\t\t\tset { _ConnectionString = value; }");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
             writer.WriteLine("\t\tpublic static void CheckAuthorize(SecurityToken token)");
@@ -92,7 +159,7 @@ namespace JetCode.FactoryDataService
                 writer.WriteLine("\t\t\t{");
                 writer.WriteLine("\t\t\t\ttoken = SecurityToken.CreateDuplicateToken(token, false);");
                 writer.WriteLine("\t\t\t}");
-                writer.WriteLine("\t\t\treturn new {0}DataService(_ConnectionString, token);", item.Alias);
+                writer.WriteLine("\t\t\treturn new {0}DataService(_ConnectionString, token, _Log);", item.Alias);
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
             }
