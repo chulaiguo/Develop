@@ -28,7 +28,6 @@ bld/
 packages
 *.user
 *.suo
-*.exe
 *.pdb
 *.aps
 *_i.c
