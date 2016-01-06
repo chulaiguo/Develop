@@ -49,6 +49,45 @@ namespace JetCode.FactoryDataService
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
 
+                if (this.ProjectName == "D3000")
+                {
+                    writer.WriteLine("\t\tprotected override bool IsLinkDBInsertEnabled");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget { return true; }");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\tprotected override bool IsLinkDBDeleteEnabled");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget { return true; }");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\tprotected override bool IsLinkDBUpdateEnabled");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget { return true; }");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\tprotected override int LinkDBInsert(BusinessBase entity, SecurityToken token)");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\treturn DBLinkHelper.LinkDBInsert(entity);");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\tprotected override int LinkDBUpdate(BusinessBase entity, SecurityToken token)");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\treturn DBLinkHelper.LinkDBUpdate(entity);");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\tprotected override int LinkDBDelete(BusinessBase entity, SecurityToken token)");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\treturn DBLinkHelper.LinkDBDelete(entity);");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\tprotected override int LinkDBDelete(DataTable list, SecurityToken token)");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\treturn DBLinkHelper.LinkDBDelete(list);");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
+
                 writer.WriteLine("\t\tprotected override bool IsLogInsertEnabled");
                 writer.WriteLine("\t\t{");
                 writer.WriteLine("\t\t\tget { return true; }");
