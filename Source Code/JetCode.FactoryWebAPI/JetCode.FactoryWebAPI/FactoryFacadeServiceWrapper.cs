@@ -57,6 +57,14 @@ namespace JetCode.FactoryWebAPI
                 foreach (MethodInfo info in list)
                 {
                     writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token)",
+                         info.ReturnType.FullName, info.Name, this.GetInputParas(info));
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\treturn {0}({1} token, new TimeSpan(0, 0, 0, 100));", info.Name, this.GetInvokeParas(info));
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+
+
+                    writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token, TimeSpan timeout)",
                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
                    
@@ -83,6 +91,7 @@ namespace JetCode.FactoryWebAPI
 
                     writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}_FacadeService:BaseAddress\"];", this.ProjectName);
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
+                    writer.WriteLine("\t\t\tclient.Timeout = timeout;");
                     writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/FacadeService/\", baseAddress.TrimEnd('/')));");
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"image/jpg\"));");
                     writer.WriteLine();
@@ -170,6 +179,19 @@ namespace JetCode.FactoryWebAPI
             foreach (ParameterInfo info in list)
             {
                 builder.AppendFormat("{0} {1},", info.ParameterType.FullName, info.Name);
+            }
+
+            return builder.ToString();
+        }
+
+        private string GetInvokeParas(MethodInfo method)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            ParameterInfo[] list = method.GetParameters();
+            foreach (ParameterInfo info in list)
+            {
+                builder.AppendFormat("{0},", info.Name);
             }
 
             return builder.ToString();
