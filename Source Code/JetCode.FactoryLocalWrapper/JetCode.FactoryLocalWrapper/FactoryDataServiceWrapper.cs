@@ -49,11 +49,17 @@ namespace JetCode.FactoryLocalWrapper
                 writer.WriteLine("\tpublic static class {0}Wrapper", className);
                 writer.WriteLine("\t{");
 
-                writer.WriteLine("\t\tpublic static void CheckAuthorize(SecurityToken token)");
-                writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\tDataServiceFactory.CheckAuthorize(token);");
-                writer.WriteLine("\t\t}");
-                writer.WriteLine();
+                if (className == "UsrAccount")
+                {
+                    writer.WriteLine("\t\tpublic static void CheckAuthorize(SecurityToken token)");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tif (token.IsAnonymous || Utils.Authentication.IsAuthenticated(token))");
+                    writer.WriteLine("\t\t\t\treturn;");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\t\tthrow new System.Security.Authentication.AuthenticationException(string.Format(\"The UserId / Password(UserID ={0}) is not valid\", token.UserId));");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
 
                 //self class
                 MethodInfo[] methods = item.Value.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
