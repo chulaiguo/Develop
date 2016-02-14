@@ -22,6 +22,7 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("using System.Net.Http.Headers;");
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using {0}.Data;", base.ProjectName);
+            writer.WriteLine("using {0}.DataService;", base.ProjectName);
 
             writer.WriteLine();
         }
