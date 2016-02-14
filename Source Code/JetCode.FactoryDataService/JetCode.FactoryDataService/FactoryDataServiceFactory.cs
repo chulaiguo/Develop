@@ -180,14 +180,6 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\t\tget { return _ConnectionString; }");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
-            writer.WriteLine("\t\tpublic static void CheckAuthorize(SecurityToken token)");
-            writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tif(token.IsAnonymous || Utils.Authentication.IsAuthenticated(token))");
-            writer.WriteLine("\t\t\t\treturn;");
-            writer.WriteLine();
-            writer.WriteLine("\t\t\tthrow new AuthenticationException(string.Format(\"The UserId/Password(UserID={0}) is not valid\", token.UserId));");
-            writer.WriteLine("\t\t}");
-            writer.WriteLine();
             foreach (ObjectSchema item in base.MappingSchema.Objects)
             {
                 writer.WriteLine("\t\tpublic static {0}DataService Create{0}DataService(SecurityToken token, bool isUsedByOtherService)", item.Alias);
