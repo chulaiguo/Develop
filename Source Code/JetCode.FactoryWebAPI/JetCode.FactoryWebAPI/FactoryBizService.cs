@@ -80,6 +80,7 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\tprivate byte[] Get{0}Result(string actionName, byte[] paras)", className);
                 writer.WriteLine("\t\t{");
                 writer.WriteLine("\t\t\tCheke.SecurityToken token = this.DeserializeToken(paras);");
+                writer.WriteLine("\t\t\tUsrAccountWrapper.CheckAuthorize(token);");
                 writer.WriteLine("\t\t\tswitch (actionName)");
                 writer.WriteLine("\t\t\t{");
 
