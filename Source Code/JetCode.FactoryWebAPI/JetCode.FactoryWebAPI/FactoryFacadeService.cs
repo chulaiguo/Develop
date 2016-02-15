@@ -81,7 +81,7 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\tprivate byte[] Get{0}Result(string actionName, byte[] paras)", className);
                 writer.WriteLine("\t\t{");
                 writer.WriteLine("\t\t\tCheke.SecurityToken token = this.DeserializeToken(paras);");
-                if (className != "BizAnonymous")
+                if (className != "BizLogin")
                 {
                     writer.WriteLine("\t\t\tUsrAccountWrapper.CheckAuthorize(token);");
                 }
