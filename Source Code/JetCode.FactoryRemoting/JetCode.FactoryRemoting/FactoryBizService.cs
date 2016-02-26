@@ -22,6 +22,7 @@ namespace JetCode.FactoryRemoting
             writer.WriteLine("using {0}.Data;", base.ProjectName);
             writer.WriteLine("using {0}.BizData;", base.ProjectName);
             writer.WriteLine("using {0}.{1}Service;", base.ProjectName, Utils._ServiceName);
+            writer.WriteLine("using {0}.DataService;", base.ProjectName);
             writer.WriteLine("using {0}.IRemotingService;", base.ProjectName);
 
             writer.WriteLine();
@@ -56,6 +57,7 @@ namespace JetCode.FactoryRemoting
                 writer.WriteLine("\t\t{");
 
                 writer.WriteLine("\t\t\tSecurityToken token = this.DeserializeToken(paras);");
+                writer.WriteLine("\t\t\tUsrAccountWrapper.CheckAuthorize(token);");
                 writer.WriteLine("\t\t\tswitch (actionName)");
                 writer.WriteLine("\t\t\t{");
 

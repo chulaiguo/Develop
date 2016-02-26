@@ -21,6 +21,7 @@ namespace JetCode.FactoryRemoting
             writer.WriteLine("using Cheke;");
             writer.WriteLine("using {0}.Data;", base.ProjectName);
             writer.WriteLine("using {0}.BizData;", base.ProjectName);
+            writer.WriteLine("using {0}.DataService;", base.ProjectName);
             writer.WriteLine("using {0}.FacadeService;", base.ProjectName);
             writer.WriteLine("using {0}.IRemotingService;", base.ProjectName);
 
@@ -56,6 +57,10 @@ namespace JetCode.FactoryRemoting
                 writer.WriteLine("\t\t{");
 
                 writer.WriteLine("\t\t\tSecurityToken token = this.DeserializeToken(paras);");
+                if (className != "BizLogin")
+                {
+                    writer.WriteLine("\t\t\tUsrAccountWrapper.CheckAuthorize(token);");
+                }
                 writer.WriteLine("\t\t\tswitch (actionName)");
                 writer.WriteLine("\t\t\t{");
 
