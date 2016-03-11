@@ -297,7 +297,7 @@ namespace JetCode.FactoryWebAPI
                 ParameterInfo info = list[i];
                 if (info.ParameterType == typeof(DateTime))
                 {
-                    builder.AppendFormat("new DateTime(((DateTime)dto.GetParameter({0})).Ticks, DateTimeKind.Utc).ToLocalTime(),", i);
+                    builder.AppendFormat("new DateTime(JsonConvert.DeserializeObject<DateTime>(dto.GetParameter({0}).ToString()).Ticks, DateTimeKind.Utc).ToLocalTime(),", i);
                 }
                 else
                 {
@@ -312,7 +312,7 @@ namespace JetCode.FactoryWebAPI
                     }
                     else
                     {
-                        builder.AppendFormat("({0})dto.GetParameter({1}),", info.ParameterType.FullName, i);
+                        builder.AppendFormat("JsonConvert.DeserializeObject<{0}>(dto.GetParameter({1}).ToString()),", info.ParameterType.FullName, i);
                     }
                 }
             }
