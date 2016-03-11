@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -107,7 +108,7 @@ namespace JetCode.FactoryWebAPI
                             writer.WriteLine();
 
                             if (method.ReturnType.Name == "Result"
-                                || method.ReturnType.Name.StartsWith("Biz")
+                                || (method.ReturnType.Name.StartsWith("Biz") && !method.ReturnType.Name.EndsWith("Collection"))
                                 || method.ReturnType.Name.EndsWith("Data")
                                 || method.ReturnType.Name.EndsWith("View"))
                             {
@@ -116,9 +117,18 @@ namespace JetCode.FactoryWebAPI
                             }
                             else if (method.ReturnType.Name.EndsWith("Collection"))
                             {
-                                string dtoType = method.ReturnType.Name.Substring(0, method.ReturnType.Name.Length - "Collection".Length);
-                                writer.WriteLine("\t\t\t\t\t{0}DTO[] _result_dto_ = {0}DTO.Serialize(_result_);", dtoType);
-                                writer.WriteLine("\t\t\t\t\treturn JsonConvert.SerializeObject(_result_dto_);");
+                                if (method.ReturnType == typeof(StringCollection))
+                                {
+                                    writer.WriteLine("\t\t\t\t\t\tstring[] _result_dto_ = new string[_result_.Count];");
+                                    writer.WriteLine("\t\t\t\t\t\t_result_.CopyTo(_result_dto_, 0);");
+                                    writer.WriteLine("\t\t\t\t\t\treturn JsonConvert.SerializeObject(_result_dto_);");
+                                }
+                                else
+                                {
+                                    string dtoType = method.ReturnType.Name.Substring(0, method.ReturnType.Name.Length - "Collection".Length);
+                                    writer.WriteLine("\t\t\t\t\t\t{0}DTO[] _result_dto_ = {0}DTO.Serialize(_result_);", dtoType);
+                                    writer.WriteLine("\t\t\t\t\t\treturn JsonConvert.SerializeObject(_result_dto_);");
+                                }
                             }
                             else
                             {
@@ -150,7 +160,7 @@ namespace JetCode.FactoryWebAPI
                                 writer.WriteLine();
 
                                 if (method.ReturnType.Name == "Result"
-                                    || method.ReturnType.Name.StartsWith("Biz")
+                                    || (method.ReturnType.Name.StartsWith("Biz") && !method.ReturnType.Name.EndsWith("Collection"))
                                     || method.ReturnType.Name.EndsWith("Data")
                                     || method.ReturnType.Name.EndsWith("View"))
                                 {
@@ -159,9 +169,18 @@ namespace JetCode.FactoryWebAPI
                                 }
                                 else if (method.ReturnType.Name.EndsWith("Collection"))
                                 {
-                                    string dtoType = method.ReturnType.Name.Substring(0, method.ReturnType.Name.Length - "Collection".Length);
-                                    writer.WriteLine("\t\t\t\t\t\t{0}DTO[] _result_dto_ = {0}DTO.Serialize(_result_);", dtoType);
-                                    writer.WriteLine("\t\t\t\t\t\treturn JsonConvert.SerializeObject(_result_dto_);");
+                                    if (method.ReturnType == typeof(StringCollection))
+                                    {
+                                        writer.WriteLine("\t\t\t\t\t\tstring[] _result_dto_ = new string[_result_.Count];");
+                                        writer.WriteLine("\t\t\t\t\t\t_result_.CopyTo(_result_dto_, 0);");
+                                        writer.WriteLine("\t\t\t\t\t\treturn JsonConvert.SerializeObject(_result_dto_);");
+                                    }
+                                    else
+                                    {
+                                        string dtoType = method.ReturnType.Name.Substring(0, method.ReturnType.Name.Length - "Collection".Length);
+                                        writer.WriteLine("\t\t\t\t\t\t{0}DTO[] _result_dto_ = {0}DTO.Serialize(_result_);", dtoType);
+                                        writer.WriteLine("\t\t\t\t\t\treturn JsonConvert.SerializeObject(_result_dto_);");
+                                    }
                                 }
                                 else
                                 {
@@ -284,7 +303,7 @@ namespace JetCode.FactoryWebAPI
                 {
                     if (info.ParameterType.Name.EndsWith("Data") || info.ParameterType.Name.EndsWith("View"))
                     {
-                        builder.AppendFormat("{0}DTO.Deserialize(({0}DTO)dto.GetParameter({1})),", info.ParameterType.Name, i);
+                        builder.AppendFormat("(({0}DTO)dto.GetParameter({1})).Deserialize(),", info.ParameterType.Name, i);
                     }
                     else if (info.ParameterType.Name.EndsWith("Collection"))
                     {

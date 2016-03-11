@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -28,7 +29,7 @@ namespace JetCode.FactoryWebAPI
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.JsonFacadeServiceWrapper", base.ProjectName);
+            writer.WriteLine("namespace {0}.FacadeServiceWrapper", base.ProjectName);
             writer.WriteLine("{");
         }
 
@@ -47,7 +48,7 @@ namespace JetCode.FactoryWebAPI
                     continue;
 
                 string className = item.Key.Substring(0, item.Key.Length - "Service".Length);//BizLoginService
-                writer.WriteLine("\tpublic static class Json{0}Wrapper", className);
+                writer.WriteLine("\tpublic static class {0}Wrapper", className);
                 writer.WriteLine("\t{");
 
                 writer.WriteLine("\t\tprivate static string _baseAddress = string.Empty;");
@@ -71,7 +72,7 @@ namespace JetCode.FactoryWebAPI
 
                     //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token, TimeSpan timeout)",
                     writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token)",
-                       this.GetDTOType(info.ReturnType.Name), info.Name, this.GetInputParas(info));
+                       this.GetDTOType(info.ReturnType), info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
                    
                     ParameterInfo[] paraList = info.GetParameters();
@@ -97,7 +98,7 @@ namespace JetCode.FactoryWebAPI
 
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
                     //writer.WriteLine("\t\t\tclient.Timeout = timeout;");
-                    writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/FacadeService/\", BaseAddress.TrimEnd('/')));");
+                    writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/JsonFacadeService/\", BaseAddress.TrimEnd('/')));");
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"application/json\"));");
                     writer.WriteLine();
                     writer.WriteLine("\t\t\tHttpContent content = new StringContent(JsonConvert.SerializeObject(token));");
@@ -117,18 +118,18 @@ namespace JetCode.FactoryWebAPI
                     {
                         if (info.ReturnType == typeof(DateTime))
                         {
-                            writer.WriteLine("\t\t\treturn new DateTime((JsonConvert.DeserializeObject<DateTime>(_data)).Ticks, DateTimeKind.Utc).ToLocalTime();");
+                            writer.WriteLine("\t\t\treturn new DateTime((JsonConvert.DeserializeObject<DateTime>(_data_)).Ticks, DateTimeKind.Utc).ToLocalTime();");
                         }
                         else
                         {
-                            writer.WriteLine("\t\t\tJsonConvert.DeserializeObject<{0}>(_data);", info.ReturnType.FullName);
+                            writer.WriteLine("\t\t\treturn JsonConvert.DeserializeObject<{0}>(_data_);", info.ReturnType.FullName);
                         }
                     }
                     else
                     {
-                        writer.WriteLine("\t\t\tif(_data_ != null && _data_.Length > 0)");
+                        writer.WriteLine("\t\t\tif(!string.IsNullOrEmpty(_data_))");
                         writer.WriteLine("\t\t\t{");
-                        writer.WriteLine("\t\t\t\tJsonConvert.DeserializeObject<{0}>(_data);", this.GetDTOType(info.ReturnType.Name));
+                        writer.WriteLine("\t\t\t\treturn JsonConvert.DeserializeObject<{0}>(_data_);", this.GetDTOType(info.ReturnType));
                         writer.WriteLine("\t\t\t}");
                         writer.WriteLine();
                         writer.WriteLine("\t\t\treturn null;");
@@ -150,25 +151,28 @@ namespace JetCode.FactoryWebAPI
             ParameterInfo[] list = method.GetParameters();
             foreach (ParameterInfo info in list)
             {
-                builder.AppendFormat("{0} {1},", this.GetDTOType(info.ParameterType.Name), info.Name);
+                builder.AppendFormat("{0} {1},", this.GetDTOType(info.ParameterType), info.Name);
             }
 
             return builder.ToString();
         }
 
-        private string GetDTOType(string name)
+        private string GetDTOType(Type type)
         {
-            if (name.EndsWith("Collection"))
+            if (type == typeof (StringCollection))
+                return "string[]";
+
+            if (type.Name.EndsWith("Collection"))
             {
-                return string.Format("{0}DTO[]", name.Substring(0, name.Length - "Collection".Length));
+                return string.Format("{0}DTO[]", type.Name.Substring(0, type.Name.Length - "Collection".Length));
             }
 
-            if (name.EndsWith("Data") || name.EndsWith("View") || name.StartsWith("Biz") || name == "Result")
+            if (type.Name.EndsWith("Data") || type.Name.EndsWith("View") || type.Name.StartsWith("Biz") || type.Name == "Result")
             {
-                return string.Format("{0}DTO", name);
+                return string.Format("{0}DTO", type.Name);
             }
 
-            return name;
+            return type.Name;
         }
 
         private string GetInvokeParas(MethodInfo method)

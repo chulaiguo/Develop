@@ -49,34 +49,26 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
-            writer.WriteLine("\t\tpublic SecurityToken(string userid, string password)");
+            writer.WriteLine("\t\tpublic SecurityTokenDTO(string userid, string password)");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tthis._userid = userid;");
+            writer.WriteLine("\t\t\tthis._userId = userid;");
             writer.WriteLine("\t\t\tthis._password = password;");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 
-            writer.WriteLine("\t\tprivate string _userid = string.Empty;");
-            writer.WriteLine("\t\tpublic string Userid");
+            writer.WriteLine("\t\tprivate string _userId = string.Empty;");
+            writer.WriteLine("\t\tpublic string UserId");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tget { return this._userid;}");
-            writer.WriteLine("\t\t\tset { this._userid = value;}");
+            writer.WriteLine("\t\t\tget { return this._userId;}");
+            writer.WriteLine("\t\t\tset { this._userId = value;}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 
-            writer.WriteLine("\t\tpprivate string _password = string.Empty;");
+            writer.WriteLine("\t\tprivate string _password = string.Empty;");
             writer.WriteLine("\t\tpublic string Password");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget { return this._password;}");
             writer.WriteLine("\t\t\tset { this._password = value;}");
-            writer.WriteLine("\t\t}");
-            writer.WriteLine();
-
-            writer.WriteLine("\t\tprivate string[] _setting = null;");
-            writer.WriteLine("\t\tpublic string[] Setting");
-            writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tget { return this._setting;}");
-            writer.WriteLine("\t\t\tset { this._setting = value;}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 

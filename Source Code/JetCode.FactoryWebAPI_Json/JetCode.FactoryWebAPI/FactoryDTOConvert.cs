@@ -54,18 +54,8 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\t\tpublic SecurityToken Deserialize()");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tSecurityToken data = new SecurityToken(this.UserId, this.Password);");
-            writer.WriteLine("\t\t\tif(this.Setting != null)");
-            writer.WriteLine("\t\t\t{");
-            writer.WriteLine("\t\t\t\tdata.Setting = new string[this.Setting.Length]");
-            writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.Setting.Length; i++)");
-            writer.WriteLine("\t\t\t\t{");
-            writer.WriteLine("\t\t\t\t\tdata.Setting[i] = this.Setting[i];");
-            writer.WriteLine("\t\t\t\t}");
-            writer.WriteLine("\t\t\t}");
-            writer.WriteLine();
             writer.WriteLine("\t\t\tif(this.PairKey != null && this.PairValue != null && this.PairKey.Length == this.PairValue.Length)");
             writer.WriteLine("\t\t\t{");
-            writer.WriteLine("\t\t\t\tdata.PairValue = new Hashtable()");
             writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.PairKey.Length; i++)");
             writer.WriteLine("\t\t\t\t{");
             writer.WriteLine("\t\t\t\t\tdata.AddPairValue(this.PairKey[i], this.PairValue[i]);");
@@ -132,21 +122,25 @@ namespace JetCode.FactoryWebAPI
                         writer.WriteLine("\t\t\tdata.{0} = this.{0};", field.Name);
                     }
                 }
-                writer.WriteLine("\t\t\tdata.AcceptChanges();");
-                writer.WriteLine("\t\t\tif(this.IsNew)");
-                writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\tdata.MarkNew();");
-                writer.WriteLine("\t\t\t}");
-                writer.WriteLine();
-                writer.WriteLine("\t\t\tif(this.IsDeleted)");
-                writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\tdata.MarkDeleted();");
-                writer.WriteLine("\t\t\t}");
-                writer.WriteLine();
-                writer.WriteLine("\t\t\tif(this.IsDirty)");
-                writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\tdata.MarkDirty();");
-                writer.WriteLine("\t\t\t}");
+
+                if (pair.Key.EndsWith("Data"))
+                {
+                    writer.WriteLine("\t\t\tdata.AcceptChanges();");
+                    writer.WriteLine("\t\t\tif(this.IsNew)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tdata.MarkNew();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\t\tif(this.IsDeleted)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tdata.Delete();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine();
+                    writer.WriteLine("\t\t\tif(this.IsDirty)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tdata.MarkDirty();");
+                    writer.WriteLine("\t\t\t}");
+                }
 
                 foreach (PropertyInfo field in list)
                 {
@@ -166,16 +160,19 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
 
-                writer.WriteLine("\t\tpublic static {0}Collection Deserialize({0}DTO[] list)", pair.Key);
-                writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\t{0}Collection retList = new {0}Collection();", pair.Key);
-                writer.WriteLine("\t\t\tfor (int i = 0; i < list.Length; i++)");
-                writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\tretList.Add(list[i].Deserialize());");
-                writer.WriteLine("\t\t\t}");
-                writer.WriteLine("\t\t\treturn retList;");
-                writer.WriteLine("\t\t}");
-                writer.WriteLine();
+                if (typeList.ContainsKey(string.Format("{0}Collection", pair.Key)))
+                {
+                    writer.WriteLine("\t\tpublic static {0}Collection Deserialize({0}DTO[] list)", pair.Key);
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\t{0}Collection retList = new {0}Collection();", pair.Key);
+                    writer.WriteLine("\t\t\tfor (int i = 0; i < list.Length; i++)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tretList.Add(list[i].Deserialize());");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\treturn retList;");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
 
                 //Serialize
                 writer.WriteLine("\t\tpublic static {0}DTO Serialize({0} data)", pair.Key);
@@ -188,10 +185,14 @@ namespace JetCode.FactoryWebAPI
                         writer.WriteLine("\t\t\tdto.{0} = data.{0};", field.Name);
                     }
                 }
-                writer.WriteLine("\t\t\tdto.ObjectID = data.ObjectID;");
-                writer.WriteLine("\t\t\tdto.IsNew = data.IsNew;");
-                writer.WriteLine("\t\t\tdto.IsDirty = data.IsDirty;");
-                writer.WriteLine("\t\t\tdto.IsDeleted = data.IsDeleted;");
+
+                if (pair.Key.EndsWith("Data"))
+                {
+                    writer.WriteLine("\t\t\tdto.ObjectID = data.ObjectID;");
+                    writer.WriteLine("\t\t\tdto.IsNew = data.IsNew;");
+                    writer.WriteLine("\t\t\tdto.IsDirty = data.IsDirty;");
+                    writer.WriteLine("\t\t\tdto.IsDeleted = data.IsDeleted;");
+                }
 
                 foreach (PropertyInfo field in list)
                 {
@@ -201,11 +202,7 @@ namespace JetCode.FactoryWebAPI
 
                         writer.WriteLine("\t\t\tif(data.{0} != null)", field.Name);
                         writer.WriteLine("\t\t\t{");
-                        writer.WriteLine("\t\t\t\tdto.{0} = new {1}DTO[data.{0}.Length]", field.Name, childrenTypeName);
-                        writer.WriteLine("\t\t\t\tfor (int i = 0; i < data.{0}.Length; i++)", field.Name);
-                        writer.WriteLine("\t\t\t\t{");
-                        writer.WriteLine("\t\t\t\t\tdto.{0}[i] = Serialize(data.{0}[i]);", field.Name);
-                        writer.WriteLine("\t\t\t\t}");
+                        writer.WriteLine("\t\t\t\tdto.{0} = {1}DTO.Serialize(data.{0});", field.Name, childrenTypeName);
                         writer.WriteLine("\t\t\t}");
                     }
                 }
@@ -213,15 +210,18 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
 
-                writer.WriteLine("\t\tpublic static {0}DTO[] Serialize({0}Collection list)", pair.Key);
-                writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\t{0}DTO[] retList = new {0}DTO[list.Length];", pair.Key);
-                writer.WriteLine("\t\t\tfor (int i = 0; i < list.Length; i++)");
-                writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\tretList[i] = Serialize(list[i]);");
-                writer.WriteLine("\t\t\t}");
-                writer.WriteLine("\t\t\treturn retList;");
-                writer.WriteLine("\t\t}");
+                if (typeList.ContainsKey(string.Format("{0}Collection", pair.Key)))
+                {
+                    writer.WriteLine("\t\tpublic static {0}DTO[] Serialize({0}Collection list)", pair.Key);
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\t{0}DTO[] retList = new {0}DTO[list.Count];", pair.Key);
+                    writer.WriteLine("\t\t\tfor (int i = 0; i < list.Count; i++)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tretList[i] = Serialize(list[i]);");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\treturn retList;");
+                    writer.WriteLine("\t\t}");
+                }
 
                 writer.WriteLine("\t}");
             }
@@ -255,15 +255,18 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
 
-                writer.WriteLine("\t\tpublic static {0}DTO[] Serialize({0}Collection list)", pair.Key);
-                writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\t{0}DTO[] retList = new {0}DTO[list.Length];", pair.Key);
-                writer.WriteLine("\t\t\tfor (int i = 0; i < list.Length; i++)");
-                writer.WriteLine("\t\t\t{");
-                writer.WriteLine("\t\t\t\tretList[i] = Serialize(list[i]);");
-                writer.WriteLine("\t\t\t}");
-                writer.WriteLine("\t\t\treturn retList;");
-                writer.WriteLine("\t\t}");
+                if (typeList.ContainsKey(string.Format("{0}Collection", pair.Key)))
+                {
+                    writer.WriteLine("\t\tpublic static {0}DTO[] Serialize({0}Collection list)", pair.Key);
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\t{0}DTO[] retList = new {0}DTO[list.Count];", pair.Key);
+                    writer.WriteLine("\t\t\tfor (int i = 0; i < list.Count; i++)");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tretList[i] = Serialize(list[i]);");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\treturn retList;");
+                    writer.WriteLine("\t\t}");
+                }
 
                 writer.WriteLine("\t}");
                 writer.WriteLine();
@@ -289,18 +292,28 @@ namespace JetCode.FactoryWebAPI
                 //Deserialize
                 writer.WriteLine("\t\tpublic {0} Deserialize()", pair.Key);
                 writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\t{0} data = new {0}", pair.Key);
+                writer.WriteLine("\t\t\t{0} data = new {0}();", pair.Key);
                 foreach (PropertyInfo field in list)
                 {
                     if (field.PropertyType.Name.EndsWith("DataCollection"))
                     {
                         writer.WriteLine("\t\t\tif(this.{0} != null)", field.Name);
                         writer.WriteLine("\t\t\t{");
-                        writer.WriteLine("\t\t\t\tdata.{0} = new {1}[this.{0}.Length]", field.Name, field.PropertyType.Name);
-                        writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.{0}.Length; i++)", field.Name);
-                        writer.WriteLine("\t\t\t\t{");
-                        writer.WriteLine("\t\t\t\t\tdata.{0}[i] = this.{0}[i];");
-                        writer.WriteLine("\t\t\t\t}");
+                        if (field.CanWrite)
+                        {
+                            writer.WriteLine("\t\t\t\tdata.{0} = new {1}[this.{0}.Length]", field.Name, field.PropertyType.Name);
+                            writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.{0}.Length; i++)", field.Name);
+                            writer.WriteLine("\t\t\t\t{");
+                            writer.WriteLine("\t\t\t\t\tdata.{0}[i] = this.{0}[i].Deserialize();", field.Name);
+                            writer.WriteLine("\t\t\t\t}");
+                        }
+                        else
+                        {
+                            writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.{0}.Length; i++)", field.Name);
+                            writer.WriteLine("\t\t\t\t{");
+                            writer.WriteLine("\t\t\t\t\tdata.{0}.Add(this.{0}[i].Deserialize());", field.Name);
+                            writer.WriteLine("\t\t\t\t}");
+                        }
                         writer.WriteLine("\t\t\t}");
                     }
                     else

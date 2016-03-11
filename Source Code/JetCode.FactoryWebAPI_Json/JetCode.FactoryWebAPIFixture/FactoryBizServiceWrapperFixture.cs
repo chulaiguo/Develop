@@ -34,7 +34,7 @@ namespace JetCode.FactoryWebAPIFixture
         {
             base.ClearSrcDirectory();
 
-            string fileName = string.Format(@"{0}\Json{1}ServiceWrapper.cs", this.SrcDirectory, Utils._ServiceName);
+            string fileName = string.Format(@"{0}\{1}ServiceWrapper.cs", this.SrcDirectory, Utils._ServiceName);
             FactoryBizServiceWrapper detail = new FactoryBizServiceWrapper(base.Schema);
             base.WriteToFile(fileName, detail);
         }
