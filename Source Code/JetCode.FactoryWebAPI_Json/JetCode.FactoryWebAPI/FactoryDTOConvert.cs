@@ -79,7 +79,7 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\t\tpublic string GetParameterJson(int index)");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring json = this.GetParameter(index).ToString();");
-            writer.WriteLine("\t\t\tif (json.StartsWith(\"{\") || json.StartsWith(\"[\"))");
+            writer.WriteLine("\t\t\tif (json.StartsWith(\"{\") || json.StartsWith(\"[\") || json.StartsWith(\"\\\"\"))");
             writer.WriteLine("\t\t\t\treturn json;");
             writer.WriteLine();
             writer.WriteLine("\t\t\treturn \"\\\"\" + json + \"\\\"\"; ");
