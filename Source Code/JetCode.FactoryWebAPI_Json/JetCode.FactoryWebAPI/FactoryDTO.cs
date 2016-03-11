@@ -184,7 +184,22 @@ namespace JetCode.FactoryWebAPI
                     }
                     else
                     {
-                        writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        if (field.PropertyType == typeof (Guid))
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1} = Guid.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
+                        else if (field.PropertyType == typeof(DateTime))
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1} = DateTime.Now;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
+                        else if (field.PropertyType == typeof(string))
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1} = string.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
+                        else
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
                     }
                 }
                 writer.WriteLine();
@@ -263,7 +278,22 @@ namespace JetCode.FactoryWebAPI
                 List<PropertyInfo> list = this.GetBizPropertyList(pair.Value);
                 foreach (PropertyInfo field in list)
                 {
-                    writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                    if (field.PropertyType == typeof(Guid))
+                    {
+                        writer.WriteLine("\t\tprivate {0} _{1} = Guid.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                    }
+                    else if (field.PropertyType == typeof(DateTime))
+                    {
+                        writer.WriteLine("\t\tprivate {0} _{1} = DateTime.Now;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                    }
+                    else if (field.PropertyType == typeof(string))
+                    {
+                        writer.WriteLine("\t\tprivate {0} _{1} = string.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                    }
+                    else
+                    {
+                        writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                    }
                 }
                 writer.WriteLine();
 
@@ -305,7 +335,22 @@ namespace JetCode.FactoryWebAPI
                     }
                     else
                     {
-                        writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        if (field.PropertyType == typeof(Guid))
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1} = Guid.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
+                        else if (field.PropertyType == typeof(DateTime))
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1} = DateTime.Now;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
+                        else if (field.PropertyType == typeof(string))
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1} = string.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
+                        else
+                        {
+                            writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                        }
                     }
                 }
                 writer.WriteLine();
