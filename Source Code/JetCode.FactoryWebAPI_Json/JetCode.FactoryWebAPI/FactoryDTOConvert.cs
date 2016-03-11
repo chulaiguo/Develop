@@ -65,7 +65,7 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 
-            writer.WriteLine("\t\tpublic object GetParameter(int index)");
+            writer.WriteLine("\t\tprivate object GetParameter(int index)");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tif (this.Parameters == null || index < 0 || index >= this.Parameters.Length)");
             writer.WriteLine("\t\t\t{");
@@ -73,6 +73,16 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\t\t\t}");
             writer.WriteLine();
             writer.WriteLine("\t\t\treturn this.Parameters[index];");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine();
+
+            writer.WriteLine("\t\tpublic string GetParameterJson(int index)");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tstring json = this.GetParameter(index).ToString();");
+            writer.WriteLine("\t\t\tif (json.StartsWith(\"{\") || json.StartsWith(\"[\"))");
+            writer.WriteLine("\t\t\t\treturn json;");
+            writer.WriteLine();
+            writer.WriteLine("\t\t\treturn \"\\\"\" + json + \"\\\"\"; ");
             writer.WriteLine("\t\t}");
 
             writer.WriteLine("\t}");

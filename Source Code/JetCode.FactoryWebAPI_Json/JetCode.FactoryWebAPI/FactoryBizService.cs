@@ -273,22 +273,22 @@ namespace JetCode.FactoryWebAPI
                 ParameterInfo info = list[i];
                 if (info.ParameterType == typeof(DateTime))
                 {
-                    builder.AppendFormat("new DateTime(JsonConvert.DeserializeObject<DateTime>(dto.GetParameter({0}).ToString()).Ticks, DateTimeKind.Utc).ToLocalTime(),", i);
+                    builder.AppendFormat("new DateTime(JsonConvert.DeserializeObject<DateTime>(dto.GetParameterJson({0})).Ticks, DateTimeKind.Utc).ToLocalTime(),", i);
                 }
                 else
                 {
                     if (info.ParameterType.Name.EndsWith("Data") || info.ParameterType.Name.EndsWith("View"))
                     {
-                        builder.AppendFormat("JsonConvert.DeserializeObject<{0}DTO>(dto.GetParameter({1}).ToString()).Deserialize(),", info.ParameterType.Name, i);
+                        builder.AppendFormat("JsonConvert.DeserializeObject<{0}DTO>(dto.GetParameterJson({1})).Deserialize(),", info.ParameterType.Name, i);
                     }
                     else if (info.ParameterType.Name.EndsWith("Collection"))
                     {
                         string dtoType = info.ParameterType.Name.Substring(0, info.ParameterType.Name.Length - "Collection".Length);
-                        builder.AppendFormat("{0}DTO.Deserialize(JsonConvert.DeserializeObject<{0}DTO[]>(dto.GetParameter({1}).ToString())),", dtoType, i);
+                        builder.AppendFormat("{0}DTO.Deserialize(JsonConvert.DeserializeObject<{0}DTO[]>(dto.GetParameterJson({1}))),", dtoType, i);
                     }
                     else
                     {
-                        builder.AppendFormat("JsonConvert.DeserializeObject<{0}>(dto.GetParameter({1}).ToString()),", info.ParameterType.FullName, i);
+                        builder.AppendFormat("JsonConvert.DeserializeObject<{0}>(dto.GetParameterJson({1})),", info.ParameterType.FullName, i);
                     }
                 }
             }
