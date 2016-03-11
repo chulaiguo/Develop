@@ -29,7 +29,7 @@ namespace JetCode.FactoryWebAPI
 
         protected override void BeginWrite(StringWriter writer)
         {
-            writer.WriteLine("namespace {0}.FacadeServiceWrapper", base.ProjectName);
+            writer.WriteLine("namespace {0}.WebAPIJsonWrapper", base.ProjectName);
             writer.WriteLine("{");
         }
 
@@ -50,14 +50,6 @@ namespace JetCode.FactoryWebAPI
                 string className = item.Key.Substring(0, item.Key.Length - "Service".Length);//BizLoginService
                 writer.WriteLine("\tpublic static class {0}Wrapper", className);
                 writer.WriteLine("\t{");
-
-                writer.WriteLine("\t\tprivate static string _baseAddress = string.Empty;");
-                writer.WriteLine("\t\tpublic static string BaseAddress");
-                writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\tget { return _baseAddress; }");
-                writer.WriteLine("\t\t\tset { _baseAddress = value; }");
-                writer.WriteLine("\t\t}");
-                writer.WriteLine();
 
                 MethodInfo[] list = item.Value.GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
                 foreach (MethodInfo info in list)
@@ -98,7 +90,7 @@ namespace JetCode.FactoryWebAPI
 
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
                     //writer.WriteLine("\t\t\tclient.Timeout = timeout;");
-                    writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/JsonFacadeService/\", BaseAddress.TrimEnd('/')));");
+                    writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/JsonFacadeService/\", ConfigurationManager.FacadeServiceBaseAddress.TrimEnd('/')));");
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"application/json\"));");
                     writer.WriteLine();
                     writer.WriteLine("\t\t\tHttpContent content = new StringContent(JsonConvert.SerializeObject(token));");
