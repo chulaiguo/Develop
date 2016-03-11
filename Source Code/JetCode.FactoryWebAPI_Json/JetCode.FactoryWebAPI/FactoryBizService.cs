@@ -279,12 +279,12 @@ namespace JetCode.FactoryWebAPI
                 {
                     if (info.ParameterType.Name.EndsWith("Data") || info.ParameterType.Name.EndsWith("View"))
                     {
-                        builder.AppendFormat("(({0}DTO)dto.GetParameter({1})).Deserialize(),", info.ParameterType.Name, i);
+                        builder.AppendFormat("JsonConvert.DeserializeObject<{0}DTO>(dto.GetParameter({1}).ToString()).Deserialize(),", info.ParameterType.Name, i);
                     }
                     else if (info.ParameterType.Name.EndsWith("Collection"))
                     {
                         string dtoType = info.ParameterType.Name.Substring(0, info.ParameterType.Name.Length - "Collection".Length);
-                        builder.AppendFormat("{0}DTO.Deserialize(({0}DTO[])dto.GetParameter({1})),", dtoType, i);
+                        builder.AppendFormat("{0}DTO.Deserialize(JsonConvert.DeserializeObject<{0}DTO[]>(dto.GetParameter({1}).ToString())),", dtoType, i);
                     }
                     else
                     {
