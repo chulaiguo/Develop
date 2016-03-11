@@ -339,8 +339,7 @@ namespace JetCode.FactoryWebAPI
             foreach (PropertyInfo info in properties)
             {
                 if (info.Name == "IsDirty" || info.Name == "IsValid" || info.Name == "PKString"
-                        || info.Name == "MarkAsDeleted" || info.Name == "TableName"
-                        || info.Name == "RowVersion")
+                        || info.Name == "MarkAsDeleted" || info.Name == "TableName")
                     continue;
 
                 if (!info.CanWrite || !info.CanRead)
