@@ -103,6 +103,11 @@ namespace JetCode.FactoryViewObj
                 writer.WriteLine("\tpublic partial class {0}", className);
                 writer.WriteLine("\t{");
 
+                writer.WriteLine("\t\tpublic {0}()", className);
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+
                 List<PropertyInfo> list = this.GetDataPropertyList(pair.Value);
 
                 //Deserialize
@@ -229,6 +234,11 @@ namespace JetCode.FactoryViewObj
 
                 writer.WriteLine("\tpublic partial class {0}", pair.Key);
                 writer.WriteLine("\t{");
+
+                writer.WriteLine("\t\tpublic {0}()", pair.Key);
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
 
                 List<PropertyInfo> list = this.GetBizPropertyList(pair.Value);
 
