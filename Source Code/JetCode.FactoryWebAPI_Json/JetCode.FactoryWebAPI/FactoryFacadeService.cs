@@ -242,7 +242,7 @@ namespace JetCode.FactoryWebAPI
         private bool IsReturnTypeValid(MethodInfo info)
         {
             if (info.ReturnType.IsValueType || info.ReturnType == typeof(string)
-                || info.ReturnType == typeof(byte[])
+                || info.ReturnType.Name.EndsWith("[]")
                 || info.ReturnType.Name == "Result"
                 || info.ReturnType.Name.StartsWith("Biz")
                 || info.ReturnType.Name.EndsWith("Data")

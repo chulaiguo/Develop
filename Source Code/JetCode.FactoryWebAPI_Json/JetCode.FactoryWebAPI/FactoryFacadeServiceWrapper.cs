@@ -54,6 +54,9 @@ namespace JetCode.FactoryWebAPI
                 MethodInfo[] list = item.Value.GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
                 foreach (MethodInfo info in list)
                 {
+                    if (!this.IsReturnTypeValid(info))
+                        continue;
+
                     //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token)",
                     //     this.GetDTOType(info.ReturnType.Name), info.Name, this.GetInputParas(info));
                     //writer.WriteLine("\t\t{");
@@ -135,6 +138,19 @@ namespace JetCode.FactoryWebAPI
             }
         }
 
+        private bool IsReturnTypeValid(MethodInfo info)
+        {
+            if (info.ReturnType.IsValueType || info.ReturnType == typeof(string)
+                || info.ReturnType.Name.EndsWith("[]")
+                || info.ReturnType.Name == "Result"
+                || info.ReturnType.Name.StartsWith("Biz")
+                || info.ReturnType.Name.EndsWith("Data")
+                || info.ReturnType.Name.EndsWith("View")
+                || info.ReturnType.Name.EndsWith("Collection"))
+                return true;
+
+            return false;
+        }
 
         private string GetInputParas(MethodInfo method)
         {
