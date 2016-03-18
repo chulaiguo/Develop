@@ -52,6 +52,15 @@ namespace JetCode.FactoryViewObj
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tthis._userId = userid;");
             writer.WriteLine("\t\t\tthis._password = password;");
+            writer.WriteLine("\t\t\tthis._secret = string.Empty;");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine();
+
+            writer.WriteLine("\t\tpublic SecurityToken(string userid, string password, string secret)");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tthis._userId = userid;");
+            writer.WriteLine("\t\t\tthis._password = password;");
+            writer.WriteLine("\t\t\tthis._secret = secret;");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 
@@ -66,6 +75,13 @@ namespace JetCode.FactoryViewObj
             writer.WriteLine("\t\tpublic string Password");
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tget { return this._password;}");
+            writer.WriteLine("\t\t}");
+            writer.WriteLine();
+
+            writer.WriteLine("\t\tprivate string _secret = string.Empty;");
+            writer.WriteLine("\t\tpublic string Secret");
+            writer.WriteLine("\t\t{");
+            writer.WriteLine("\t\t\tget { return this._secret;}");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
 

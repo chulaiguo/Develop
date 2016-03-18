@@ -50,7 +50,7 @@ namespace JetCode.FactoryViewObj
             //Serialize
             writer.WriteLine("\t\tpublic SecurityTokenDTO Serialize()");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tSecurityTokenDTO dto = new SecurityTokenDTO(this.UserId, this.Password);");
+            writer.WriteLine("\t\t\tSecurityTokenDTO dto = new SecurityTokenDTO(this.UserId, this.Password, this.Secret);");
             writer.WriteLine("\t\t\tif(this.PairKey != null && this.PairValue != null && this.PairKey.Length == this.PairValue.Length)");
             writer.WriteLine("\t\t\t{");
             writer.WriteLine("\t\t\t\tdto.PairKey = new string[this.PairKey.Length];");

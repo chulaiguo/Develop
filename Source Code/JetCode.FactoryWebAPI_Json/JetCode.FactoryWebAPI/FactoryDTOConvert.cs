@@ -53,7 +53,7 @@ namespace JetCode.FactoryWebAPI
             //Deserialize
             writer.WriteLine("\t\tpublic SecurityToken Deserialize()");
             writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tSecurityToken data = new SecurityToken(this.UserId, this.Password);");
+            writer.WriteLine("\t\t\tSecurityToken data = new SecurityToken(this.UserId, this.Password, this.Secret);");
             writer.WriteLine("\t\t\tif(this.PairKey != null && this.PairValue != null && this.PairKey.Length == this.PairValue.Length)");
             writer.WriteLine("\t\t\t{");
             writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.PairKey.Length; i++)");
