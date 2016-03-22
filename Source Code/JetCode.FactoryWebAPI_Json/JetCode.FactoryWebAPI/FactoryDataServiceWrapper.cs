@@ -222,6 +222,11 @@ namespace JetCode.FactoryWebAPI
                 return string.Format("{0}DTO[]", type.Name.Substring(0, type.Name.Length - "Collection".Length));
             }
 
+            if (type.Name.EndsWith("Data[]") || type.Name.EndsWith("View[]"))
+            {
+                return string.Format("{0}DTO[]", type.Name.Substring(0, type.Name.Length - "[]".Length));
+            }
+
             if (type.Name.EndsWith("Data") || type.Name.EndsWith("View") || type.Name.StartsWith("Biz") || type.Name == "Result")
             {
                 return string.Format("{0}DTO", type.Name);

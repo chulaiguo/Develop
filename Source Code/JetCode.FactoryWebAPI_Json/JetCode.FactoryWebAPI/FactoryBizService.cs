@@ -153,6 +153,7 @@ namespace JetCode.FactoryWebAPI
                                 }
 
                                 writer.WriteLine("\t\t\t\t\t\treturn JsonConvert.SerializeObject(_result_);");
+                                writer.WriteLine("\t\t\t\t\t}");
                             }
                             else
                             {
