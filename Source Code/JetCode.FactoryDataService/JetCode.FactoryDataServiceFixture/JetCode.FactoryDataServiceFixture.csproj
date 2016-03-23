@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryCRUDLiteFixture.cs" />
     <Compile Include="FactoryDataServiceBaseFixture.cs" />
     <Compile Include="FactoryCRUDFixture.cs" />
     <Compile Include="FactoryGetByPageFixture.cs" />

@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryCRUDLite.cs" />
     <Compile Include="FactoryDataServiceBase.cs" />
     <Compile Include="FactoryGetByPage.cs" />
     <Compile Include="FactoryGetByIndex.cs" />
