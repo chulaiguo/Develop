@@ -40,7 +40,7 @@ namespace JetCode.FactoryDataService
         {
             foreach (ObjectSchema obj in base.MappingSchema.Objects)
             {
-                writer.WriteLine("\tpublic class DAL{0} : DALBase", obj.Alias);
+                writer.WriteLine("\tpublic partial class DAL{0} : DALBase", obj.Alias);
                 writer.WriteLine("\t{");
 
                 this.WriteConstructor(writer, obj);
@@ -288,7 +288,7 @@ namespace JetCode.FactoryDataService
                     builder.AppendFormat("{0},", item.Alias);
                 }
             }
-            writer.WriteLine("\t\t\tstring sql = string.Format(\"SELECT {0} FROM [{{1}}] {{2}}\", this.TableName, sqlWhere);", builder);
+            writer.WriteLine("\t\t\tstring sql = string.Format(\"SELECT {0} FROM [{{0}}] {{1}}\", this.TableName, sqlWhere);", builder);
             writer.WriteLine("\t\t\tDataSet dataSet = this.ExecuteDataset(sql, paras);");
             writer.WriteLine("\t\t\tif (dataSet.Tables.Count == 0)");
             writer.WriteLine("\t\t\t\treturn retList;");
