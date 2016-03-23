@@ -19,8 +19,8 @@ namespace JetCode.FactoryDataService
         {
             writer.WriteLine("using System;");
             writer.WriteLine("using System.Data;");
-            writer.WriteLine("using System.Text;");
             writer.WriteLine("using System.Data.SqlClient;");
+            writer.WriteLine("using System.Collections.ObjectModel;");
 
             writer.WriteLine();
         }
@@ -301,7 +301,7 @@ namespace JetCode.FactoryDataService
             {
                 FieldSchema item = obj.Fields[i];
 
-                writer.WriteLine("\t\t\t\tobject obj = row[{0}];", i);
+                writer.WriteLine("\t\t\t\tobject obj{0} = row[{1}];", item.Alias, i);
 
                 Type fieldType = Utilities.ToDotNetType(item.DataType);
                 if (fieldType.IsValueType)
@@ -323,10 +323,10 @@ namespace JetCode.FactoryDataService
                         writer.WriteLine("\t\t\t\tdata.{0} = 0;", item.Alias);
                     }
                     
-                    writer.WriteLine("\t\t\t\tif (obj != null)");
+                    writer.WriteLine("\t\t\t\tif (obj{0} != null)", item.Alias);
                     writer.WriteLine("\t\t\t\t{");
                     writer.WriteLine("\t\t\t\t\t{0} value;", fieldType.Name);
-                    writer.WriteLine("\t\t\t\t\tif ({0}.TryParse(obj.ToString(), out value))", fieldType.Name);
+                    writer.WriteLine("\t\t\t\t\tif ({0}.TryParse(obj{1}.ToString(), out value))", fieldType.Name, item.Alias);
                     writer.WriteLine("\t\t\t\t\t{");
                     writer.WriteLine("\t\t\t\t\t\tdata.{0} = value;", item.Alias);
                     writer.WriteLine("\t\t\t\t\t}");
@@ -336,9 +336,9 @@ namespace JetCode.FactoryDataService
                 {
                     if (fieldType == typeof(string))
                     {
-                        writer.WriteLine("\t\t\t\tif (obj != null)");
+                        writer.WriteLine("\t\t\t\tif (obj{0} != null)", item.Alias);
                         writer.WriteLine("\t\t\t\t{");
-                        writer.WriteLine("\t\t\t\t\tdata.{0} = obj.ToString();", item.Alias);
+                        writer.WriteLine("\t\t\t\t\tdata.{0} = obj{0}.ToString();", item.Alias);
                         writer.WriteLine("\t\t\t\t}");
                         writer.WriteLine("\t\t\t\telse");
                         writer.WriteLine("\t\t\t\t{");
@@ -347,7 +347,7 @@ namespace JetCode.FactoryDataService
                     }
                     else
                     {
-                        writer.WriteLine("\t\t\t\tdata.{0} = obj as {1};", item.Alias, fieldType);
+                        writer.WriteLine("\t\t\t\tdata.{0} = obj{0} as {1};", item.Alias, fieldType);
                     }
                 }
 
@@ -391,7 +391,7 @@ namespace JetCode.FactoryDataService
                 i++;
             }
 
-            writer.WriteLine("\t\t\tObservableCollection<{0}Data> retList this.FetchData(sql, paras);", obj.Alias);
+            writer.WriteLine("\t\t\tObservableCollection<{0}Data> retList = this.FetchData(sql, paras);", obj.Alias);
             writer.WriteLine("\t\t\tif(retList.Count > 0)");
             writer.WriteLine("\t\t\t{");
             writer.WriteLine("\t\t\t\treturn retList[0];");
