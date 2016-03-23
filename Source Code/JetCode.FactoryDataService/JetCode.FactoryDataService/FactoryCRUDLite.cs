@@ -77,28 +77,18 @@ namespace JetCode.FactoryDataService
 
         private void WriteInsert(StringWriter writer, ObjectSchema obj)
         {
+            List<FieldSchema> list = this.GetInsertFields(obj);
+
             StringBuilder sqlBuilder = new StringBuilder();
             sqlBuilder.AppendFormat("INSERT INTO [{{0}}] (");
-            foreach (FieldSchema item in obj.Fields)
+            foreach (FieldSchema item in list)
             {
-                if(item.IsJoined)
-                    continue;
-
-                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
-                    continue;
-
                 sqlBuilder.AppendFormat("[{0}],", item.Name);
             }
             sqlBuilder.Remove(sqlBuilder.Length - 1, 1);
             sqlBuilder.AppendFormat(") VALUES(");
-            foreach (FieldSchema item in obj.Fields)
+            foreach (FieldSchema item in list)
             {
-                if (item.IsJoined)
-                    continue;
-
-                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
-                    continue;
-
                 sqlBuilder.AppendFormat("@{0},", item.Name);
             }
             sqlBuilder.Remove(sqlBuilder.Length - 1, 1);
@@ -108,16 +98,10 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\tpublic int Insert({0}Data entity)", obj.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
-            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", this.GetInsertFieldCount(obj));
+            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", list.Count);
             int i = 0;
-            foreach (FieldSchema item in obj.Fields)
+            foreach (FieldSchema item in list)
             {
-                if (item.IsJoined)
-                    continue;
-
-                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
-                    continue;
-
                 string sqlTypeSize = this.ToSqlDBTypeSize(item);
                 if (sqlTypeSize.Length == 0)
                 {
@@ -153,21 +137,13 @@ namespace JetCode.FactoryDataService
 
         private void WriteUpdate(StringWriter writer, ObjectSchema obj)
         {
+            List<FieldSchema> list = this.GetUpdateFields(obj);
+
             StringBuilder sqlBuilder = new StringBuilder();
             sqlBuilder.AppendFormat("UPDATE [{{0}}] SET ");
-            string rowVersion = string.Empty;
             StringCollection pkList = new StringCollection();
-            foreach (FieldSchema item in obj.Fields)
+            foreach (FieldSchema item in list)
             {
-                if (item.IsJoined)
-                    continue;
-
-                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    rowVersion = item.Name;
-                    continue;
-                }
-
                 if (item.IsPK)
                 {
                     pkList.Add(item.Name);
@@ -183,27 +159,17 @@ namespace JetCode.FactoryDataService
                 sqlBuilder.AppendFormat(" [{0}] = @{0} AND", pk);
             }
 
-            if (rowVersion.Length > 0)
-            {
-                sqlBuilder.AppendFormat(" [{0}] = @{0}", rowVersion);
-            }
-            else
-            {
-                sqlBuilder.Remove(sqlBuilder.Length - 3, 3);
-            }
+            sqlBuilder.Remove(sqlBuilder.Length - 3, 3);
             string sql = sqlBuilder.ToString();
 
             writer.WriteLine("\t\tpublic int Update({0}Data entity)", obj.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
-            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", this.GetUpdateFieldCount(obj));
+            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", list.Count);
 
             int i = 0;
-            foreach (FieldSchema item in obj.Fields)
+            foreach (FieldSchema item in list)
             {
-                if (item.IsJoined)
-                    continue;
-
                 string sqlTypeSize = this.ToSqlDBTypeSize(item);
                 if (sqlTypeSize.Length == 0)
                 {
@@ -237,9 +203,9 @@ namespace JetCode.FactoryDataService
             writer.WriteLine();
         }
 
-        private int GetInsertFieldCount(ObjectSchema obj)
+        private List<FieldSchema> GetInsertFields(ObjectSchema obj)
         {
-            int ret = 0;
+            List<FieldSchema> retList = new List<FieldSchema>();
             foreach (FieldSchema item in obj.Fields)
             {
                 if (item.IsJoined)
@@ -248,37 +214,57 @@ namespace JetCode.FactoryDataService
                 if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
                     continue;
 
-                ret++;
+                retList.Add(item);
             }
 
-            return ret;
+            return retList;
         }
 
-        private int GetUpdateFieldCount(ObjectSchema obj)
+        private List<FieldSchema> GetUpdateFields(ObjectSchema obj)
         {
-            int ret = 0;
+            List<FieldSchema> retList = new List<FieldSchema>();
             foreach (FieldSchema item in obj.Fields)
             {
                 if (item.IsJoined)
                     continue;
 
-                ret++;
+                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
+                    continue;
+
+                retList.Add(item);
             }
 
-            return ret;
+            return retList;
+        }
+
+        private List<FieldSchema> GetSelectFields(ObjectSchema obj)
+        {
+            List<FieldSchema> retList = new List<FieldSchema>();
+            foreach (FieldSchema item in obj.Fields)
+            {
+                if (System.String.Compare(item.DataType, "timestamp", System.StringComparison.OrdinalIgnoreCase) == 0)
+                    continue;
+
+                retList.Add(item);
+            }
+
+            return retList;
         }
 
         private void WriteFetchEntity(StringWriter writer, ObjectSchema obj)
         {
+            List<FieldSchema> list = this.GetSelectFields(obj);
+
             writer.WriteLine("\t\tprivate ObservableCollection<{0}Data> FetchData(string sqlWhere, SqlParameter[] paras)", obj.Alias);
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tObservableCollection<{0}Data> retList = new ObservableCollection<{0}Data>();", obj.Alias);
             writer.WriteLine();
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < obj.Fields.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                FieldSchema item = obj.Fields[i];
-                if (i == obj.Fields.Count - 1)
+                FieldSchema item = list[i];
+
+                if (i == list.Count - 1)
                 {
                     builder.AppendFormat("{0}", item.Alias);
                 }
@@ -296,9 +282,9 @@ namespace JetCode.FactoryDataService
             writer.WriteLine("\t\t\t{");
             writer.WriteLine("\t\t\t\t{0}Data data = new {0}Data();", obj.Name);
             writer.WriteLine();
-            for (int i = 0; i < obj.Fields.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
-                FieldSchema item = obj.Fields[i];
+                FieldSchema item = list[i];
 
                 writer.WriteLine("\t\t\t\tobject obj{0} = row[{1}];", item.Alias, i);
 
@@ -352,6 +338,7 @@ namespace JetCode.FactoryDataService
 
                 writer.WriteLine();
             }
+            writer.WriteLine("\t\t\t\tdata.AcceptChanges();");
             writer.WriteLine("\t\t\t\tretList.Add(data);");
             writer.WriteLine("\t\t\t}");
 
@@ -435,7 +422,6 @@ namespace JetCode.FactoryDataService
 
         private void WriteDeleteByPK(StringWriter writer, ObjectSchema obj)
         {
-            FieldSchema rowVersion = obj.GetRowVersion();
             List<FieldSchema> pkList = obj.GetPKList();
 
             StringBuilder sqlBuilder = new StringBuilder();
@@ -445,34 +431,15 @@ namespace JetCode.FactoryDataService
                 sqlBuilder.AppendFormat(" [{0}] = @{0} AND", item.Name);
             }
 
-            if (rowVersion != null)
-            {
-                sqlBuilder.AppendFormat(" [{0}] = @{0}", rowVersion.Name);
-            }
-            else
-            {
-                sqlBuilder.Remove(sqlBuilder.Length - 3, 3);
-            }
-
+            sqlBuilder.Remove(sqlBuilder.Length - 3, 3);
             string sql = sqlBuilder.ToString();
             string pkInputParams = this.GetPKDeclareParameters(obj);
-            if (rowVersion != null)
-            {
-                pkInputParams = string.Format("{0}, byte[] {1}", pkInputParams, rowVersion.Name);
-            }
+            
             writer.WriteLine("\t\tprivate int DeleteByPK({0})", pkInputParams);
 
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
-
-            if (rowVersion != null)
-            {
-                writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", pkList.Count + 1);
-            }
-            else
-            {
-                writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", pkList.Count);
-            }
+            writer.WriteLine("\t\t\tSqlParameter[] paras = new SqlParameter[{0}];", pkList.Count);
 
             int i = 0;
             foreach (FieldSchema item in pkList)
@@ -480,13 +447,6 @@ namespace JetCode.FactoryDataService
                 writer.WriteLine("\t\t\tparas[{0}] = new SqlParameter(\"@{1}\", {2});", i, item.Name, this.ToSqlDBType(item));
                 writer.WriteLine("\t\t\tparas[{0}].Value = {1};", i, item.Name);
                 i++;
-            }
-
-            if (rowVersion != null)
-            {
-                writer.WriteLine("\t\t\tparas[{0}] = new SqlParameter(\"@{1}\", {2}, {3});", i, rowVersion.Name, this.ToSqlDBType(rowVersion), rowVersion.Size);
-                writer.WriteLine("\t\t\tparas[{0}].Value = {1};", i, rowVersion.Name);
-
             }
 
             writer.WriteLine("\t\t\treturn base.ExecuteNonQuery(sql, paras);");
