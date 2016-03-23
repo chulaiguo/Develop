@@ -54,7 +54,6 @@ namespace JetCode.FactoryDataService
                 this.WriteGetByParent(writer, obj);
 
                 this.WriteDeleteByPK(writer, obj);
-                this.WriteDeleteAll(writer, obj);
                 this.WriteDeleteByParent(writer, obj);
 
                 writer.WriteLine();
@@ -461,7 +460,7 @@ namespace JetCode.FactoryDataService
             {
                 pkInputParams = string.Format("{0}, byte[] {1}", pkInputParams, rowVersion.Name);
             }
-            writer.WriteLine("\t\tpublic int DeleteByPK({0})", pkInputParams);
+            writer.WriteLine("\t\tprivate int DeleteByPK({0})", pkInputParams);
 
             writer.WriteLine("\t\t{");
             writer.WriteLine("\t\t\tstring sql = string.Format(\"{0}\", this.TableName);", sql);
@@ -492,16 +491,6 @@ namespace JetCode.FactoryDataService
 
             writer.WriteLine("\t\t\treturn base.ExecuteNonQuery(sql, paras);");
 
-            writer.WriteLine("\t\t}");
-            writer.WriteLine();
-        }
-
-        private void WriteDeleteAll(StringWriter writer, ObjectSchema obj)
-        {
-            writer.WriteLine("\t\tpublic int DeleteAll()");
-            writer.WriteLine("\t\t{");
-            writer.WriteLine("\t\t\tstring sql = string.Format(\"DELETE FROM [{0}]\", this.TableName);");
-            writer.WriteLine("\t\t\treturn base.ExecuteNonQuery(sql, null);");
             writer.WriteLine("\t\t}");
             writer.WriteLine();
         }
