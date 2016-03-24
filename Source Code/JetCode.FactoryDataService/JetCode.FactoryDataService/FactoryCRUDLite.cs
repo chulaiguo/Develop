@@ -122,6 +122,17 @@ namespace JetCode.FactoryDataService
                     writer.WriteLine("\t\t\t\tparas[{0}].Value = entity.{1};", i, item.Name);
                     writer.WriteLine("\t\t\t}");
                 }
+                else if (item.DataType == "image")
+                {
+                    writer.WriteLine("\t\t\tif (entity.{0} == null)", item.Name);
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tparas[{0}].Value = DBNull.Value;", i);
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\telse");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tparas[{0}].Value = entity.{1};", i, item.Name);
+                    writer.WriteLine("\t\t\t}");
+                }
                 else
                 {
                     writer.WriteLine("\t\t\tparas[{0}].Value = entity.{1};", i, item.Name);
@@ -182,6 +193,17 @@ namespace JetCode.FactoryDataService
                 if (item.DataType == "uniqueidentifier")
                 {
                     writer.WriteLine("\t\t\tif (entity.{0} == Guid.Empty)", item.Name);
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tparas[{0}].Value = DBNull.Value;", i);
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\telse");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tparas[{0}].Value = entity.{1};", i, item.Name);
+                    writer.WriteLine("\t\t\t}");
+                }
+                else if (item.DataType == "image")
+                {
+                    writer.WriteLine("\t\t\tif (entity.{0} == null)", item.Name);
                     writer.WriteLine("\t\t\t{");
                     writer.WriteLine("\t\t\t\tparas[{0}].Value = DBNull.Value;", i);
                     writer.WriteLine("\t\t\t}");
