@@ -345,7 +345,7 @@ namespace JetCode.FactoryDataService
                     {
                         writer.WriteLine("\t\t\t\tif (obj{0} != null)", item.Alias);
                         writer.WriteLine("\t\t\t\t{");
-                        writer.WriteLine("\t\t\t\t\tdata.{0} = obj{0}.ToString();", item.Alias);
+                        writer.WriteLine("\t\t\t\t\tdata.{0} = obj{0}.ToString().Trim();", item.Alias);
                         writer.WriteLine("\t\t\t\t}");
                         writer.WriteLine("\t\t\t\telse");
                         writer.WriteLine("\t\t\t\t{");
