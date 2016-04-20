@@ -132,8 +132,8 @@ namespace JetCode.FactoryData
                     {
                         writer.WriteLine("\t\tpublic {0} {1}", propertyType, item.Key.Name);
                         writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\tget{{ return this.{0}.ToLocalTime(); }}", fieldName);
-                        writer.WriteLine("\t\t\tset{{ this.{0} = value.ToUniversalTime(); }}", fieldName);
+                        writer.WriteLine("\t\t\tget{{ return this.{0}; }}", fieldName);
+                        writer.WriteLine("\t\t\tset{{ this.{0} = value; }}", fieldName);
                         writer.WriteLine("\t\t}");
                     }
                     else
@@ -151,8 +151,8 @@ namespace JetCode.FactoryData
                     {
                         writer.WriteLine("//\t\tpublic {0} {1}", propertyType, item.Key.Name);
                         writer.WriteLine("//\t\t{");
-                        writer.WriteLine("//\t\t\tget{{ return this.{0}.ToLocalTime(); }}", fieldName);
-                        writer.WriteLine("//\t\t\tset{{ this.{0} = value.ToUniversalTime(); }}", fieldName);
+                        writer.WriteLine("//\t\t\tget{{ return this.{0}; }}", fieldName);
+                        writer.WriteLine("//\t\t\tset{{ this.{0} = value; }}", fieldName);
                         writer.WriteLine("//\t\t}");
                     }
                     else
