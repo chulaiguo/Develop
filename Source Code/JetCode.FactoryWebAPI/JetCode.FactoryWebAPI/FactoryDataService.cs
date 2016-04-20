@@ -93,14 +93,7 @@ namespace JetCode.FactoryWebAPI
                     {
                         MethodInfo method = pair.Value[0];
                         writer.WriteLine("\t\t\t\t\t{0} _result_  = {1}Wrapper.{2}({3});", method.ReturnType.FullName, className, pair.Key, this.GetInputParas(method));
-                        if (method.ReturnType.IsValueType)
-                        {
-                            if (method.ReturnType == typeof(DateTime))
-                            {
-                                writer.WriteLine("\t\t\t\t\t_result_ = _result_.ToUniversalTime();");
-                            }
-                        }
-                        else
+                        if (!method.ReturnType.IsValueType)
                         {
                             writer.WriteLine("\t\t\t\t\tif(_result_ == null)");
                             writer.WriteLine("\t\t\t\t\t\treturn null;");
@@ -116,14 +109,7 @@ namespace JetCode.FactoryWebAPI
                             writer.WriteLine("\t\t\t\t\tif(token.ParameterNames == \"{0}\")", this.GetParaNameList(method));
                             writer.WriteLine("\t\t\t\t\t{");
                             writer.WriteLine("\t\t\t\t\t\t{0} _result_  = {1}Wrapper.{2}({3});", method.ReturnType.FullName, className, pair.Key, this.GetInputParas(method));
-                            if (method.ReturnType.IsValueType)
-                            {
-                                if (method.ReturnType == typeof(DateTime))
-                                {
-                                    writer.WriteLine("\t\t\t\t\t\t_result_ = _result_.ToUniversalTime();");
-                                }
-                            }
-                            else
+                            if (!method.ReturnType.IsValueType)
                             {
                                 writer.WriteLine("\t\t\t\t\t\tif(_result_ == null)");
                                 writer.WriteLine("\t\t\t\t\t\t\treturn null;");
@@ -235,14 +221,7 @@ namespace JetCode.FactoryWebAPI
             for (int i = 0; i < list.Length; i++)
             {
                 ParameterInfo info = list[i];
-                if (info.ParameterType == typeof(DateTime))
-                {
-                    builder.AppendFormat("new DateTime(((DateTime)token.GetParameter({0})).Ticks, DateTimeKind.Utc).ToLocalTime(),", i);
-                }
-                else
-                {
-                    builder.AppendFormat("({0})token.GetParameter({1}),", info.ParameterType.FullName, i);
-                }
+                builder.AppendFormat("({0})token.GetParameter({1}),", info.ParameterType.FullName, i);
             }
 
             return string.Format("{0} token", builder);

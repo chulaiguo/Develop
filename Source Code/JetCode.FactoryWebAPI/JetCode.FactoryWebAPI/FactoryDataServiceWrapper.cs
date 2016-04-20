@@ -74,15 +74,7 @@ namespace JetCode.FactoryWebAPI
                         {
                             ParameterInfo para = paraList[i];
                             writer.WriteLine("\t\t\tparaNames[{0}] = \"{1}\";", i, para.Name);
-
-                            if (para.ParameterType == typeof (DateTime))
-                            {
-                                writer.WriteLine("\t\t\tparaValues[{0}] = {1}.ToUniversalTime();", i, para.Name);
-                            }
-                            else
-                            {
-                                writer.WriteLine("\t\t\tparaValues[{0}] = {1};", i, para.Name);
-                            }
+                            writer.WriteLine("\t\t\tparaValues[{0}] = {1};", i, para.Name);
                         }
                         writer.WriteLine();
                         writer.WriteLine("\t\t\tSecurityToken _token_ = SecurityToken.CreateFrameworkToken(token, paraNames, paraValues);");
@@ -111,15 +103,7 @@ namespace JetCode.FactoryWebAPI
                         writer.WriteLine("\t\t\tbyte[] _data_ = res.Content.ReadAsByteArrayAsync().Result;");
                         if (info.ReturnType.IsValueType)
                         {
-                            if (info.ReturnType == typeof (DateTime))
-                            {
-                                writer.WriteLine("\t\t\treturn new DateTime(((System.DateTime)Compression.DecompressToObject(_data_)).Ticks, DateTimeKind.Utc).ToLocalTime();");
-                            }
-                            else
-                            {
-                                writer.WriteLine("\t\t\treturn ({0})Compression.DecompressToObject(_data_);",
-                                    info.ReturnType.FullName);
-                            }
+                             writer.WriteLine("\t\t\treturn ({0})Compression.DecompressToObject(_data_);", info.ReturnType.FullName);
                         }
                         else
                         {
