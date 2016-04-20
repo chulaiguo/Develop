@@ -65,15 +65,7 @@ namespace JetCode.FactoryRemoting
                         {
                             ParameterInfo para = paraList[i];
                             writer.WriteLine("\t\t\tparaNames[{0}] = \"{1}\";", i, para.Name);
-
-                            if (para.ParameterType == typeof (DateTime))
-                            {
-                                writer.WriteLine("\t\t\tparaValues[{0}] = {1}.ToUniversalTime();", i, para.Name);
-                            }
-                            else
-                            {
-                                writer.WriteLine("\t\t\tparaValues[{0}] = {1};", i, para.Name);
-                            }
+                            writer.WriteLine("\t\t\tparaValues[{0}] = {1};", i, para.Name);
                         }
                         writer.WriteLine();
                         writer.WriteLine("\t\t\tSecurityToken _token_ = SecurityToken.CreateFrameworkToken(token, paraNames, paraValues);");
@@ -85,10 +77,6 @@ namespace JetCode.FactoryRemoting
                         {
                             writer.WriteLine("\t\t\t{0} _result_ =  ({0})Compression.DecompressToObject(_data_);",
                                 info.ReturnType.FullName);
-                            if (info.ReturnType == typeof (DateTime))
-                            {
-                                writer.WriteLine("\t\t\t_result_ = new DateTime(_result_.Ticks, DateTimeKind.Utc).ToLocalTime();");
-                            }
                         }
                         else
                         {
