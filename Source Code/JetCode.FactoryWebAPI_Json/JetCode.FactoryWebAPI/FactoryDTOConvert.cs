@@ -42,7 +42,6 @@ namespace JetCode.FactoryWebAPI
             this.WriteResultDTO(writer);
             this.WriteDataDTO(writer);
             this.WriteBizDTO(writer);
-            this.WriteEmailDTO(writer);
         }
 
         private void WriteTokenDTO(StringWriter writer)
@@ -285,62 +284,6 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine();
         }
 
-        private void WriteEmailDTO(StringWriter writer)
-        {
-            string dllName = "Cheke.EmailData.dll";
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
-            foreach (KeyValuePair<string, Type> pair in typeList)
-            {
-                if (pair.Key.EndsWith("Collection"))
-                    continue;
-
-                writer.WriteLine("\tpublic partial class {0}DTO", pair.Key);
-                writer.WriteLine("\t{");
-
-                List<PropertyInfo> list = this.GetEmailPropertyList(pair.Value);
-              
-                //Deserialize
-                writer.WriteLine("\t\tpublic {0} Deserialize()", pair.Key);
-                writer.WriteLine("\t\t{");
-                writer.WriteLine("\t\t\t{0} data = new {0}();", pair.Key);
-                foreach (PropertyInfo field in list)
-                {
-                    if (field.PropertyType.Name.EndsWith("DataCollection"))
-                    {
-                        writer.WriteLine("\t\t\tif(this.{0} != null)", field.Name);
-                        writer.WriteLine("\t\t\t{");
-                        if (field.CanWrite)
-                        {
-                            writer.WriteLine("\t\t\t\tdata.{0} = new {1}[this.{0}.Length]", field.Name, field.PropertyType.Name);
-                            writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.{0}.Length; i++)", field.Name);
-                            writer.WriteLine("\t\t\t\t{");
-                            writer.WriteLine("\t\t\t\t\tdata.{0}[i] = this.{0}[i].Deserialize();", field.Name);
-                            writer.WriteLine("\t\t\t\t}");
-                        }
-                        else
-                        {
-                            writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.{0}.Length; i++)", field.Name);
-                            writer.WriteLine("\t\t\t\t{");
-                            writer.WriteLine("\t\t\t\t\tdata.{0}.Add(this.{0}[i].Deserialize());", field.Name);
-                            writer.WriteLine("\t\t\t\t}");
-                        }
-                        writer.WriteLine("\t\t\t}");
-                    }
-                    else
-                    {
-                        writer.WriteLine("\t\t\tdata.{0} = this.{0};", field.Name);
-                    }
-                }
-                writer.WriteLine("\t\t\treturn data;");
-                writer.WriteLine("\t\t}");
-                writer.WriteLine();
-
-                writer.WriteLine("\t}");
-            }
-
-            writer.WriteLine();
-        }
-
         private List<PropertyInfo> GetDataPropertyList(Type type)
         {
             List<PropertyInfo> retList = new List<PropertyInfo>();
@@ -376,31 +319,20 @@ namespace JetCode.FactoryWebAPI
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
             foreach (PropertyInfo info in properties)
             {
-                if (!info.CanWrite || !info.CanRead)
+                if (!info.CanRead)
                     continue;
 
-                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
+                if (!info.CanWrite)
                 {
-                    retList.Add(info);
-                }
-            }
+                    if (info.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        retList.Add(info);
+                    }
 
-            return retList;
-        }
-
-        private List<PropertyInfo> GetEmailPropertyList(Type type)
-        {
-            List<PropertyInfo> retList = new List<PropertyInfo>();
-
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            foreach (PropertyInfo info in properties)
-            {
-                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
-                {
-                    retList.Add(info);
+                    continue;
                 }
 
-                if (info.PropertyType.Name.EndsWith("DataCollection"))
+                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
                 {
                     retList.Add(info);
                 }

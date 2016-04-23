@@ -37,7 +37,6 @@ namespace JetCode.FactoryWebAPI
             this.WriteResultDTO(writer);
             this.WriteDataDTO(writer);
             this.WriteBizDTO(writer);
-            this.WriteEmailDTO(writer);
         }
 
         private void WriteTokenDTO(StringWriter writer)
@@ -328,77 +327,6 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine();
         }
 
-        private void WriteEmailDTO(StringWriter writer)
-        {
-            string dllName = "Cheke.EmailData.dll";
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
-            foreach (KeyValuePair<string, Type> pair in typeList)
-            {
-                if (pair.Key.EndsWith("Collection"))
-                    continue;
-
-                writer.WriteLine("\tpublic partial class {0}DTO", pair.Key);
-                writer.WriteLine("\t{");
-
-                List<PropertyInfo> list = this.GetEmailPropertyList(pair.Value);
-                foreach (PropertyInfo field in list)
-                {
-                    if (field.PropertyType.Name.EndsWith("DataCollection"))
-                    {
-                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "Collection".Length);
-                        writer.WriteLine("\t\tprivate {0}DTO[] _{1};", childrenTypeName, base.LowerFirstLetter(field.Name));
-                    }
-                    else
-                    {
-                        if (field.PropertyType == typeof(Guid))
-                        {
-                            writer.WriteLine("\t\tprivate {0} _{1} = Guid.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                        }
-                        else if (field.PropertyType == typeof(DateTime))
-                        {
-                            writer.WriteLine("\t\tprivate {0} _{1} = DateTime.Now;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                        }
-                        else if (field.PropertyType == typeof(string))
-                        {
-                            writer.WriteLine("\t\tprivate {0} _{1} = string.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                        }
-                        else
-                        {
-                            writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                        }
-                    }
-                }
-                writer.WriteLine();
-
-                foreach (PropertyInfo field in list)
-                {
-                    if (field.PropertyType.Name.EndsWith("DataCollection"))
-                    {
-                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "Collection".Length);
-                        writer.WriteLine("\t\tpublic {0}DTO[] {1}", childrenTypeName, field.Name);
-                        writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t}");
-                        writer.WriteLine();
-                    }
-                    else
-                    {
-                        writer.WriteLine("\t\tpublic {0} {1}", field.PropertyType.FullName, field.Name);
-                        writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t}");
-                        writer.WriteLine();
-                    }
-                }
-
-                writer.WriteLine("\t}");
-            }
-
-            writer.WriteLine();
-        }
-
         private List<PropertyInfo> GetDataPropertyList(Type type)
         {
             List<PropertyInfo> retList = new List<PropertyInfo>();
@@ -434,31 +362,20 @@ namespace JetCode.FactoryWebAPI
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
             foreach (PropertyInfo info in properties)
             {
-                if (!info.CanWrite || !info.CanRead)
+                if (!info.CanRead)
                     continue;
 
-                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
+                if (!info.CanWrite)
                 {
-                    retList.Add(info);
-                }
-            }
+                    if (info.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        retList.Add(info);
+                    }
 
-            return retList;
-        }
-
-        private List<PropertyInfo> GetEmailPropertyList(Type type)
-        {
-            List<PropertyInfo> retList = new List<PropertyInfo>();
-
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            foreach (PropertyInfo info in properties)
-            {
-                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
-                {
-                    retList.Add(info);
+                    continue;
                 }
 
-                if (info.PropertyType.Name.EndsWith("DataCollection"))
+                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
                 {
                     retList.Add(info);
                 }
