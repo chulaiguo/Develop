@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryUTCTime.cs" />
     <Compile Include="FactoryDataService.cs" />
     <Compile Include="FactoryFacadeService.cs" />
     <Compile Include="FactoryBizService.cs" />

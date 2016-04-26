@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactoryUTCTimeFixture.cs" />
     <Compile Include="FactoryDataServiceFixture.cs" />
     <Compile Include="FactoryFacadeServiceFixture.cs" />
     <Compile Include="FactoryBizServiceFixture.cs" />

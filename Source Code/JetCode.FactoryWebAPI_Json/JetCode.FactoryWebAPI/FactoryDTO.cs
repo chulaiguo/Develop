@@ -292,6 +292,13 @@ namespace JetCode.FactoryWebAPI
                 List<PropertyInfo> list = this.GetBizPropertyList(pair.Value);
                 foreach (PropertyInfo field in list)
                 {
+                    if (field.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "Collection".Length);
+                        writer.WriteLine("\t\tprivate {0}DTO[] _{1};", childrenTypeName, base.LowerFirstLetter(field.Name));
+                        continue;
+                    }
+
                     if (field.PropertyType == typeof(Guid))
                     {
                         writer.WriteLine("\t\tprivate {0} _{1} = Guid.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
@@ -313,12 +320,26 @@ namespace JetCode.FactoryWebAPI
 
                 foreach (PropertyInfo field in list)
                 {
-                    writer.WriteLine("\t\tpublic {0} {1}", field.PropertyType.FullName, field.Name);
-                    writer.WriteLine("\t\t{");
-                    writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
-                    writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
-                    writer.WriteLine("\t\t}");
-                    writer.WriteLine();
+                    if (field.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        string childrenTypeName = field.PropertyType.Name.Substring(0,
+                            field.PropertyType.Name.Length - "Collection".Length);
+                        writer.WriteLine("\t\tpublic {0}DTO[] {1}", childrenTypeName, field.Name);
+                        writer.WriteLine("\t\t{");
+                        writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
+                        writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
+                        writer.WriteLine("\t\t}");
+                        writer.WriteLine();
+                    }
+                    else
+                    {
+                        writer.WriteLine("\t\tpublic {0} {1}", field.PropertyType.FullName, field.Name);
+                        writer.WriteLine("\t\t{");
+                        writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
+                        writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
+                        writer.WriteLine("\t\t}");
+                        writer.WriteLine();
+                    }
                 }
 
                 writer.WriteLine("\t}");

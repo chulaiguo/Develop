@@ -18,7 +18,6 @@ namespace JetCode.FactoryWebAPI
         {
             writer.WriteLine("using System;");
             writer.WriteLine("using Cheke;");
-            writer.WriteLine("using Cheke.EmailData;");
             writer.WriteLine("using Cheke.BusinessEntity;");
             writer.WriteLine("using {0}.BizData;", base.ProjectName);
             writer.WriteLine("using {0}.Data;", base.ProjectName);
@@ -258,7 +257,22 @@ namespace JetCode.FactoryWebAPI
                 writer.WriteLine("\t\t\t{0}DTO dto = new {0}DTO();", pair.Key);
                 foreach (PropertyInfo field in list)
                 {
-                    writer.WriteLine("\t\t\tdto.{0} = data.{0};", field.Name);
+                    if (!field.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        writer.WriteLine("\t\t\tdto.{0} = data.{0};", field.Name);
+                    }
+                }
+                foreach (PropertyInfo field in list)
+                {
+                    if (field.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "Collection".Length);
+
+                        writer.WriteLine("\t\t\tif(data.{0} != null)", field.Name);
+                        writer.WriteLine("\t\t\t{");
+                        writer.WriteLine("\t\t\t\tdto.{0} = {1}DTO.Serialize(data.{0});", field.Name, childrenTypeName);
+                        writer.WriteLine("\t\t\t}");
+                    }
                 }
                 writer.WriteLine("\t\t\treturn dto;");
                 writer.WriteLine("\t\t}");
@@ -276,6 +290,38 @@ namespace JetCode.FactoryWebAPI
                     writer.WriteLine("\t\t\treturn retList;");
                     writer.WriteLine("\t\t}");
                 }
+
+                //Deserialize
+                writer.WriteLine("\t\tpublic {0} Deserialize()", pair.Key);
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\t{0} data = new {0}();", pair.Key);
+                foreach (PropertyInfo field in list)
+                {
+                    if (!field.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        writer.WriteLine("\t\t\tdata.{0} = this.{0};", field.Name);
+                    }
+                }
+                foreach (PropertyInfo field in list)
+                {
+                    if (field.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        writer.WriteLine("\t\t\tif(this.{0} != null)", field.Name);
+                        writer.WriteLine("\t\t\t{");
+                        if (field.CanWrite)
+                        {
+                            writer.WriteLine("\t\t\t\tdata.{0} = new {1}();", field.Name, field.PropertyType.Name);
+                        }
+                        writer.WriteLine("\t\t\t\tfor (int i = 0; i < this.{0}.Length; i++)", field.Name);
+                        writer.WriteLine("\t\t\t\t{");
+                        writer.WriteLine("\t\t\t\t\tdata.{0}.Add(this.{0}[i].Deserialize());", field.Name);
+                        writer.WriteLine("\t\t\t\t}");
+                        writer.WriteLine("\t\t\t}");
+                    }
+                }
+                writer.WriteLine("\t\t\treturn data;");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
 
                 writer.WriteLine("\t}");
                 writer.WriteLine();
