@@ -63,6 +63,73 @@ namespace JetCode.FactoryViewObj
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
 
+                if (item.Alias == "LogDBEditActivity")
+                {
+                    writer.WriteLine("\t\tpublic override DateTime LogDateTime");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tDateTime utc = new DateTime(base.LogDateTime.Ticks, DateTimeKind.Utc);");
+                    writer.WriteLine("\t\t\t\treturn utc.ToLocalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\tset");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tbase.LogDateTime = value.ToUniversalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
+
+                if (item.Alias == "LogDBDeleteActivity")
+                {
+                    writer.WriteLine("\t\tpublic override DateTime LogDateTime");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tDateTime utc = new DateTime(base.LogDateTime.Ticks, DateTimeKind.Utc);");
+                    writer.WriteLine("\t\t\t\treturn utc.ToLocalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\tset");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tbase.LogDateTime = value.ToUniversalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
+
+                if (item.Alias == "BDSiteSyncTable")
+                {
+                    writer.WriteLine("\t\tpublic override DateTime DBLastSync");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tDateTime utc = new DateTime(base.DBLastSync.Ticks, DateTimeKind.Utc);");
+                    writer.WriteLine("\t\t\t\treturn utc.ToLocalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\tset");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tbase.DBLastSync = value.ToUniversalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
+
+                if (item.Alias == "BDSitePanelSyncTask")
+                {
+                    writer.WriteLine("\t\tpublic override DateTime TaskLastSync");
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tDateTime utc = new DateTime(base.TaskLastSync.Ticks, DateTimeKind.Utc);");
+                    writer.WriteLine("\t\t\t\treturn utc.ToLocalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t\tset");
+                    writer.WriteLine("\t\t\t{");
+                    writer.WriteLine("\t\t\t\tbase.TaskLastSync = value.ToUniversalTime();");
+                    writer.WriteLine("\t\t\t}");
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+                }
 
                 writer.WriteLine("\t}");
             }
