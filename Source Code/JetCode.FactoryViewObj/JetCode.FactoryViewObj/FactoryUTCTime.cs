@@ -37,19 +37,32 @@ namespace JetCode.FactoryViewObj
 
                 writer.WriteLine("\t\tpublic override DateTime CreatedOn");
                 writer.WriteLine("\t\t{");
-
                 writer.WriteLine("\t\t\tget");
                 writer.WriteLine("\t\t\t{");
                 writer.WriteLine("\t\t\t\tDateTime utc = new DateTime(base.CreatedOn.Ticks, DateTimeKind.Utc);");
                 writer.WriteLine("\t\t\t\treturn utc.ToLocalTime();");
                 writer.WriteLine("\t\t\t}");
-
                 writer.WriteLine("\t\t\tset");
                 writer.WriteLine("\t\t\t{");
                 writer.WriteLine("\t\t\t\tbase.CreatedOn = value.ToUniversalTime();");
                 writer.WriteLine("\t\t\t}");
                 writer.WriteLine("\t\t}");
                 writer.WriteLine();
+
+                writer.WriteLine("\t\tpublic override DateTime ModifiedOn");
+                writer.WriteLine("\t\t{");
+                writer.WriteLine("\t\t\tget");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\tDateTime utc = new DateTime(base.ModifiedOn.Ticks, DateTimeKind.Utc);");
+                writer.WriteLine("\t\t\t\treturn utc.ToLocalTime();");
+                writer.WriteLine("\t\t\t}");
+                writer.WriteLine("\t\t\tset");
+                writer.WriteLine("\t\t\t{");
+                writer.WriteLine("\t\t\t\tbase.ModifiedOn = value.ToUniversalTime();");
+                writer.WriteLine("\t\t\t}");
+                writer.WriteLine("\t\t}");
+                writer.WriteLine();
+
 
                 writer.WriteLine("\t}");
             }
