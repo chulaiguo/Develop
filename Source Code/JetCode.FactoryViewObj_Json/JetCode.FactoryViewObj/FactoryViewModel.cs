@@ -40,7 +40,6 @@ namespace JetCode.FactoryViewObj
             this.WriteBusinessBase(writer);
             this.WriteDataObj(writer);
             this.WriteBizObj(writer);
-            this.WriteEmailObj(writer);
         }
 
         private void WriteToken(StringWriter writer)
@@ -347,61 +346,10 @@ namespace JetCode.FactoryViewObj
                     }
                     else
                     {
-                        writer.WriteLine("\t\tprivate {0} _{1};", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                    }
-                }
-                writer.WriteLine();
-
-                foreach (PropertyInfo field in list)
-                {
-                    writer.WriteLine("\t\tpublic {0} {1}", field.PropertyType.FullName, field.Name);
-                    writer.WriteLine("\t\t{");
-                    writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
-                    writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
-                    writer.WriteLine("\t\t}");
-                    writer.WriteLine();
-                }
-
-                writer.WriteLine("\t}");
-            }
-
-            writer.WriteLine();
-        }
-
-        private void WriteEmailObj(StringWriter writer)
-        {
-            string dllName = "Cheke.EmailData.dll";
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
-            foreach (KeyValuePair<string, Type> pair in typeList)
-            {
-                if (pair.Key.EndsWith("Collection"))
-                    continue;
-
-                string className = pair.Key.Substring(0, pair.Key.Length - "Data".Length);
-                writer.WriteLine("\tpublic partial class {0}", className);
-                writer.WriteLine("\t{");
-
-                List<PropertyInfo> list = this.GetEmailPropertyList(pair.Value);
-                foreach (PropertyInfo field in list)
-                {
-                    if (field.PropertyType.Name.EndsWith("DataCollection"))
-                    {
-                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "DataCollection".Length);
-                        writer.WriteLine("\t\tprivate {0}[] _{1};", childrenTypeName, base.LowerFirstLetter(field.Name));
-                    }
-                    else
-                    {
-                        if (field.PropertyType == typeof(Guid))
+                        if (field.PropertyType.FullName.EndsWith("Collection"))
                         {
-                            writer.WriteLine("\t\tprivate {0} _{1} = Guid.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                        }
-                        else if (field.PropertyType == typeof(DateTime))
-                        {
-                            writer.WriteLine("\t\tprivate {0} _{1} = DateTime.Now;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
-                        }
-                        else if (field.PropertyType == typeof(string))
-                        {
-                            writer.WriteLine("\t\tprivate {0} _{1} = string.Empty;", field.PropertyType.FullName, base.LowerFirstLetter(field.Name));
+                            string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "Collection".Length);
+                            writer.WriteLine("\t\tprivate {0}[] _{1};", childrenTypeName, base.LowerFirstLetter(field.Name));
                         }
                         else
                         {
@@ -413,25 +361,21 @@ namespace JetCode.FactoryViewObj
 
                 foreach (PropertyInfo field in list)
                 {
-                    if (field.PropertyType.Name.EndsWith("DataCollection"))
+                    if (field.PropertyType.FullName.EndsWith("Collection"))
                     {
-                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "DataCollection".Length);
+                        string childrenTypeName = field.PropertyType.Name.Substring(0, field.PropertyType.Name.Length - "Collection".Length);
                         writer.WriteLine("\t\tpublic {0}[] {1}", childrenTypeName, field.Name);
-                        writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t}");
-                        writer.WriteLine();
                     }
                     else
                     {
                         writer.WriteLine("\t\tpublic {0} {1}", field.PropertyType.FullName, field.Name);
-                        writer.WriteLine("\t\t{");
-                        writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
-                        writer.WriteLine("\t\t}");
-                        writer.WriteLine();
                     }
+
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\tget {{ return this._{0}; }}", base.LowerFirstLetter(field.Name));
+                    writer.WriteLine("\t\t\tset {{ this._{0} = value; }}", base.LowerFirstLetter(field.Name));
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
                 }
 
                 writer.WriteLine("\t}");
@@ -475,31 +419,20 @@ namespace JetCode.FactoryViewObj
             PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
             foreach (PropertyInfo info in properties)
             {
-                if (!info.CanWrite || !info.CanRead)
+                if (!info.CanRead)
                     continue;
 
-                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
+                if (!info.CanWrite)
                 {
-                    retList.Add(info);
-                }
-            }
+                    if (info.PropertyType.Name.EndsWith("Collection"))
+                    {
+                        retList.Add(info);
+                    }
 
-            return retList;
-        }
-
-        private List<PropertyInfo> GetEmailPropertyList(Type type)
-        {
-            List<PropertyInfo> retList = new List<PropertyInfo>();
-
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            foreach (PropertyInfo info in properties)
-            {
-                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
-                {
-                    retList.Add(info);
+                    continue;
                 }
 
-                if (info.PropertyType.Name.EndsWith("DataCollection"))
+                if (info.PropertyType.IsValueType || info.PropertyType == typeof(string) || info.PropertyType == typeof(byte[]))
                 {
                     retList.Add(info);
                 }
