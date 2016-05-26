@@ -9,9 +9,9 @@ namespace JetCode.FactoryWebAPI
 {
     public static class Utils
     {
-        public const string _ServiceName = "MAS";
+        //public const string _ServiceName = "MAS";
         //public const string _ServiceName = "AS400";
-        //public const string _ServiceName = "LocalFile";
+        public const string _ServiceName = "LocalFile";
 
 
         public static SortedList<string, Type> GetTypeList(string projectName, string dllName)

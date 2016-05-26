@@ -56,15 +56,15 @@ namespace JetCode.FactoryWebAPI
                 {
                     foreach (MethodInfo info in pair.Value)
                     {
-                        //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token)",
-                        //  this.GetDTOType(info.ReturnType.Name), info.Name, this.GetInputParas(info));
-                        //writer.WriteLine("\t\t{");
-                        //writer.WriteLine("\t\t\treturn {0}({1} token, new TimeSpan(0, 0, 0, 100));", info.Name, this.GetInvokeParas(info));
-                        //writer.WriteLine("\t\t}");
-                        //writer.WriteLine();
-
-                        //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token, TimeSpan timeout)",
                         writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token)",
+                          this.GetDTOType(info.ReturnType), info.Name, this.GetInputParas(info));
+                        writer.WriteLine("\t\t{");
+                        writer.WriteLine("\t\t\treturn {0}({1} token, TimeSpan.FromSeconds(100));", info.Name, this.GetInvokeParas(info));
+                        writer.WriteLine("\t\t}");
+                        writer.WriteLine();
+
+                        writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token, TimeSpan timeout)",
+                        //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token)",
                             this.GetDTOType(info.ReturnType), info.Name, this.GetInputParas(info));
                         writer.WriteLine("\t\t{");
 
@@ -82,7 +82,7 @@ namespace JetCode.FactoryWebAPI
                         writer.WriteLine();
 
                         writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
-                        //writer.WriteLine("\t\t\tclient.Timeout = timeout;");
+                        writer.WriteLine("\t\t\tclient.Timeout = timeout;");
                         writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{0}/JsonDataService/\", ConfigurationManager.DataServiceBaseAddress.TrimEnd('/')));");
                         writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"application/json\"));");
                         writer.WriteLine();
