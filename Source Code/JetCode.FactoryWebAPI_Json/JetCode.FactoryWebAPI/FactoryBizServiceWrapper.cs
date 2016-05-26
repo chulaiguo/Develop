@@ -58,7 +58,7 @@ namespace JetCode.FactoryWebAPI
                         continue;
 
                     writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityTokenDTO token)",
-                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
+                       this.GetDTOType(info.ReturnType), info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
                     writer.WriteLine("\t\t\treturn {0}({1} token, TimeSpan.FromSeconds(100));", info.Name, this.GetInvokeParas(info));
                     writer.WriteLine("\t\t}");
