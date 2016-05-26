@@ -53,16 +53,16 @@ namespace JetCode.FactoryWebAPI
                 MethodInfo[] list = item.Value.GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
                 foreach (MethodInfo info in list)
                 {
-                    //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token)",
-                    //    info.ReturnType.FullName, info.Name, this.GetInputParas(info));
-                    //writer.WriteLine("\t\t{");
-                    //writer.WriteLine("\t\t\treturn {0}({1} token, new TimeSpan(0, 0, 0, 100));", info.Name, this.GetInvokeParas(info));
-                    //writer.WriteLine("\t\t}");
-                    //writer.WriteLine();
-
-
-                    //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token, TimeSpan timeout)",
                     writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token)",
+                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
+                    writer.WriteLine("\t\t{");
+                    writer.WriteLine("\t\t\treturn {0}({1} token, TimeSpan.FromSeconds(100));", info.Name, this.GetInvokeParas(info));
+                    writer.WriteLine("\t\t}");
+                    writer.WriteLine();
+
+
+                    writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token, TimeSpan timeout)",
+                    //writer.WriteLine("\t\tpublic static {0} {1}({2} SecurityToken token)",
                        info.ReturnType.FullName, info.Name, this.GetInputParas(info));
                     writer.WriteLine("\t\t{");
 
@@ -81,7 +81,7 @@ namespace JetCode.FactoryWebAPI
 
                     writer.WriteLine("\t\t\tstring baseAddress = System.Configuration.ConfigurationManager.AppSettings[\"{0}_{1}Service:BaseAddress\"];", this.ProjectName, Utils._ServiceName);
                     writer.WriteLine("\t\t\tHttpClient client = new HttpClient();");
-                    //writer.WriteLine("\t\t\tclient.Timeout = timeout;");
+                    writer.WriteLine("\t\t\tclient.Timeout = timeout;");
                     writer.WriteLine("\t\t\tclient.BaseAddress = new Uri(string.Format(\"{{0}}/{0}Service/\", baseAddress.TrimEnd('/')));", Utils._ServiceName);
                     writer.WriteLine("\t\t\tclient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(\"image/jpg\"));");
                     writer.WriteLine();
