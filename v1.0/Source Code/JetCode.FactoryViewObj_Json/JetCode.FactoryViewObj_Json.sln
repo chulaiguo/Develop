@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryViewObj", "JetCode.FactoryViewObj\JetCode.FactoryViewObj.csproj", "{C862AF99-3498-45AC-A692-0D92D24393C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryViewObjFixture", "JetCode.FactoryViewObjFixture\JetCode.FactoryViewObjFixture.csproj", "{EDAD98F5-2537-49D5-9E13-C3AF0A6B66F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C862AF99-3498-45AC-A692-0D92D24393C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C862AF99-3498-45AC-A692-0D92D24393C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C862AF99-3498-45AC-A692-0D92D24393C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C862AF99-3498-45AC-A692-0D92D24393C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDAD98F5-2537-49D5-9E13-C3AF0A6B66F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDAD98F5-2537-49D5-9E13-C3AF0A6B66F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDAD98F5-2537-49D5-9E13-C3AF0A6B66F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDAD98F5-2537-49D5-9E13-C3AF0A6B66F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

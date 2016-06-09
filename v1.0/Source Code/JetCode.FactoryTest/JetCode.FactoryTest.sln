@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryTest", "JetCode.FactoryTest\JetCode.FactoryTest.csproj", "{3963BE38-20CD-4C63-9EF5-BE87C0BE253D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryTestFixture", "JetCode.FactoryTestFixture\JetCode.FactoryTestFixture.csproj", "{8C18CAC0-586E-4191-8CF1-3B0E18D78B9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3963BE38-20CD-4C63-9EF5-BE87C0BE253D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3963BE38-20CD-4C63-9EF5-BE87C0BE253D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3963BE38-20CD-4C63-9EF5-BE87C0BE253D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3963BE38-20CD-4C63-9EF5-BE87C0BE253D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C18CAC0-586E-4191-8CF1-3B0E18D78B9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C18CAC0-586E-4191-8CF1-3B0E18D78B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C18CAC0-586E-4191-8CF1-3B0E18D78B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C18CAC0-586E-4191-8CF1-3B0E18D78B9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

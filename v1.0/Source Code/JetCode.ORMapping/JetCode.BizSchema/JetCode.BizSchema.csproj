@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{83396B01-5286-4C63-9185-62D788FA50A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JetCode.BizSchema</RootNamespace>
+    <AssemblyName>JetCode.BizSchema</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MappingCheckErrors.cs" />
+    <Compile Include="Factory\SchemaFactory.cs" />
+    <Compile Include="ChildSchema.cs" />
+    <Compile Include="ChildSchemaCollection.cs" />
+    <Compile Include="FieldSchema.cs" />
+    <Compile Include="FieldSchemaCollection.cs" />
+    <Compile Include="IndexSchema.cs" />
+    <Compile Include="IndexSchemaCollection.cs" />
+    <Compile Include="JoinSchema.cs" />
+    <Compile Include="JoinSchemaCollection.cs" />
+    <Compile Include="MappingInsertOrder.cs" />
+    <Compile Include="MappingSchema.cs" />
+    <Compile Include="ObjectSchema.cs" />
+    <Compile Include="ObjectSchemaCollection.cs" />
+    <Compile Include="ParentSchema.cs" />
+    <Compile Include="ParentSchemaCollection.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MappingSynchronize.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JetCode.DBSchema\JetCode.DBSchema.csproj">
+      <Project>{D8416C88-47FD-43CA-AAEC-7E147F935D3D}</Project>
+      <Name>JetCode.DBSchema</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

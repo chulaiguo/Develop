@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryService", "JetCode.FactoryService\JetCode.FactoryService.csproj", "{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryServiceFixture", "JetCode.FactoryServiceFixture\JetCode.FactoryServiceFixture.csproj", "{F73F2BDB-3628-4045-AE18-31C347067708}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B051D8F-9A8C-40B2-9FD1-8A1461972E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F73F2BDB-3628-4045-AE18-31C347067708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F73F2BDB-3628-4045-AE18-31C347067708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F73F2BDB-3628-4045-AE18-31C347067708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F73F2BDB-3628-4045-AE18-31C347067708}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

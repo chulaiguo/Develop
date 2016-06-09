@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryWinUI", "JetCode.FactoryWinUI\JetCode.FactoryWinUI.csproj", "{0390DAC2-E2BD-4B3B-A8F2-75C0DF056B8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryWinUIFixture", "JetCode.FactoryWinUIFixture\JetCode.FactoryWinUIFixture.csproj", "{3513161C-AD66-4112-9836-6D6012BD6BAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0390DAC2-E2BD-4B3B-A8F2-75C0DF056B8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0390DAC2-E2BD-4B3B-A8F2-75C0DF056B8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0390DAC2-E2BD-4B3B-A8F2-75C0DF056B8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0390DAC2-E2BD-4B3B-A8F2-75C0DF056B8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3513161C-AD66-4112-9836-6D6012BD6BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3513161C-AD66-4112-9836-6D6012BD6BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3513161C-AD66-4112-9836-6D6012BD6BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3513161C-AD66-4112-9836-6D6012BD6BAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

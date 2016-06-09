@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.DBSchema", "JetCode.DBSchema\JetCode.DBSchema.csproj", "{D8416C88-47FD-43CA-AAEC-7E147F935D3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.BizSchema", "JetCode.BizSchema\JetCode.BizSchema.csproj", "{83396B01-5286-4C63-9185-62D788FA50A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.MapperConfigure", "JetCode.MapperConfigure\JetCode.MapperConfigure.csproj", "{A58EBB1E-EAB5-4C25-8569-44A91DA4AF9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8416C88-47FD-43CA-AAEC-7E147F935D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8416C88-47FD-43CA-AAEC-7E147F935D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8416C88-47FD-43CA-AAEC-7E147F935D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8416C88-47FD-43CA-AAEC-7E147F935D3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83396B01-5286-4C63-9185-62D788FA50A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83396B01-5286-4C63-9185-62D788FA50A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83396B01-5286-4C63-9185-62D788FA50A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83396B01-5286-4C63-9185-62D788FA50A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A58EBB1E-EAB5-4C25-8569-44A91DA4AF9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A58EBB1E-EAB5-4C25-8569-44A91DA4AF9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A58EBB1E-EAB5-4C25-8569-44A91DA4AF9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A58EBB1E-EAB5-4C25-8569-44A91DA4AF9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

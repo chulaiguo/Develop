@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryLocalWrapper", "JetCode.FactoryLocalWrapper\JetCode.FactoryLocalWrapper.csproj", "{80F4F81C-704E-4E24-9A38-1D0894C6B317}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryLocalWrapperFixture", "JetCode.FactoryLocalWrapperFixture\JetCode.FactoryLocalWrapperFixture.csproj", "{F70105D3-39A2-4121-B132-455B8C52474C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80F4F81C-704E-4E24-9A38-1D0894C6B317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F4F81C-704E-4E24-9A38-1D0894C6B317}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F4F81C-704E-4E24-9A38-1D0894C6B317}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F4F81C-704E-4E24-9A38-1D0894C6B317}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F70105D3-39A2-4121-B132-455B8C52474C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F70105D3-39A2-4121-B132-455B8C52474C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F70105D3-39A2-4121-B132-455B8C52474C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F70105D3-39A2-4121-B132-455B8C52474C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

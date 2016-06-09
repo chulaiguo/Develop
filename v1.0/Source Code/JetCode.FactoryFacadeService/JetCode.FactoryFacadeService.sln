@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryFacadeService", "JetCode.FactoryFacadeService\JetCode.FactoryFacadeService.csproj", "{01129EF8-2AB1-463D-801A-C4860AD4039E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JetCode.FactoryFacadeServiceFixture", "JetCode.FactoryFacadeServiceFixture\JetCode.FactoryFacadeServiceFixture.csproj", "{061D0D6F-78E1-4B23-A62E-10AA7EEB9E4E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{01129EF8-2AB1-463D-801A-C4860AD4039E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01129EF8-2AB1-463D-801A-C4860AD4039E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01129EF8-2AB1-463D-801A-C4860AD4039E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01129EF8-2AB1-463D-801A-C4860AD4039E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{061D0D6F-78E1-4B23-A62E-10AA7EEB9E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061D0D6F-78E1-4B23-A62E-10AA7EEB9E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061D0D6F-78E1-4B23-A62E-10AA7EEB9E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061D0D6F-78E1-4B23-A62E-10AA7EEB9E4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
