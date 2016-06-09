@@ -3,36 +3,47 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using JetCode.BizSchema;
-using System.Collections.Specialized;
 
 namespace JetCode.FactoryWinUI
 {
     public static class Utils
     {
-        public static SortedList<string, Type> GetTypeList(string projectName, string dllName)
+        private static float GetLastestVersion(string projectName)
+        {
+            DirectoryInfo info = new DirectoryInfo(string.Format(@"E:\Work\Projects\{0}", projectName));
+            DirectoryInfo[] list = info.GetDirectories();
+
+            float maxVersion = 0;
+            foreach (DirectoryInfo item in list)
+            {
+                float version;
+                if (float.TryParse(item.Name.Substring(1), out version))
+                {
+                    if (version >= maxVersion)
+                    {
+                        maxVersion = version;
+                    }
+                }
+            }
+
+            return maxVersion;
+        }
+
+        public static SortedList<string, Type> GetDataTypeList(string projectName)
         {
             SortedList<string, Type> retList = new SortedList<string, Type>();
 
-            StringCollection list = new StringCollection();
-            list.Add(string.Format(@"E:\Work\{0}V2\Bin\{1}", projectName, dllName));
-            list.Add(string.Format(@"E:\Work\{0}\Bin\{1}", projectName, dllName));
-
-            foreach (string dll in list)
+            string path = string.Format(@"E:\Work\Projects\{0}\v{1:f1}\Bin\{0}.Data.v{1:f1}.dll", projectName, GetLastestVersion(projectName));
+            Assembly assembly = Assembly.LoadFrom(path);
+            if (assembly != null)
             {
-                if (File.Exists(dll))
+                Type[] typeList = assembly.GetTypes();
+                foreach (Type item in typeList)
                 {
-                    Assembly assembly = Assembly.LoadFrom(dll);
-                    if (assembly != null)
-                    {
-                        Type[] typeList = assembly.GetTypes();
-                        foreach (Type item in typeList)
-                        {
-                            if (retList.ContainsKey(item.Name))
-                                continue;
+                    if (retList.ContainsKey(item.Name))
+                        continue;
 
-                            retList.Add(item.Name, item);
-                        }
-                    }
+                    retList.Add(item.Name, item);
                 }
             }
 
@@ -41,48 +52,11 @@ namespace JetCode.FactoryWinUI
 
         public static Type GetDataType(MappingSchema mappingSchema, ObjectSchema objectSchema)
         {
-            Assembly assembly = GetDataAssembly(mappingSchema.Name);
-            if (assembly == null)
-                return null;
-
-            Type[] types = assembly.GetTypes();
-            foreach (Type item in types)
+            SortedList<string, Type> list = GetDataTypeList(mappingSchema.Name);
+            foreach (KeyValuePair<string, Type> pair in list)
             {
-                if (item.Name == objectSchema.Name + "Data")
-                    return item;
-            }
-
-            return null;
-        }
-
-        public static Type GetDataViewType(MappingSchema mappingSchema, ObjectSchema objectSchema)
-        {
-            Assembly assembly = GetDataAssembly(mappingSchema.Name);
-            if (assembly == null)
-                return null;
-
-            Type[] types = assembly.GetTypes();
-            foreach (Type item in types)
-            {
-                if (item.Name == objectSchema.Name + "View")
-                    return item;
-            }
-
-            return null;
-        }
-
-        private static Assembly GetDataAssembly(string projectName)
-        {
-            StringCollection list = new StringCollection();
-            list.Add(string.Format(@"E:\Work\{0}V2\Bin\{0}.Data.dll", projectName));
-            list.Add(string.Format(@"E:\Work\{0}\Bin\{0}.Data.dll", projectName));
-
-            foreach (string item in list)
-            {
-                if (File.Exists(item))
-                {
-                    return Assembly.LoadFrom(item);
-                }
+                if (pair.Key == objectSchema.Name + "Data")
+                    return pair.Value;
             }
 
             return null;

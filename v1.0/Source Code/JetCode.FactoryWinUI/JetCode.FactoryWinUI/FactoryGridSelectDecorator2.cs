@@ -107,7 +107,7 @@ namespace JetCode.FactoryWinUI
         private List<PropertyInfo> GetViewFields()
         {
             List<PropertyInfo> retList = new List<PropertyInfo>();
-            Type type = Utils.GetDataViewType(this.MappingSchema, this.ObjectSchema);
+            Type type = Utils.GetDataType(this.MappingSchema, this.ObjectSchema);
             if (type == null)
                 return retList;
 

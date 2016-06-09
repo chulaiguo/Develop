@@ -39,8 +39,7 @@ namespace JetCode.FactoryLocalWrapper
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.{1}Service.dll", base.ProjectName, Utils._ServiceName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetBizServiceTypeList(base.ProjectName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {
                 if (!item.Key.EndsWith("Service") || !item.Value.IsPublic)

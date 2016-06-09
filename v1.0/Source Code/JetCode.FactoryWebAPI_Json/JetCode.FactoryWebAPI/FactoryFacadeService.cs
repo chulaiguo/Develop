@@ -47,8 +47,7 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\tpublic class JsonFacadeServiceController : ApiController");
             writer.WriteLine("\t{");
 
-            string dllName = string.Format("{0}.FacadeService.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetFacadeServiceTypeList(base.ProjectName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {
                 if (!item.Key.EndsWith("Service") || !item.Value.IsPublic)

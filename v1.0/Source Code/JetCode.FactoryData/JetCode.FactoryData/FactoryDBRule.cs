@@ -40,8 +40,7 @@ namespace JetCode.FactoryData
         {
             SortedList<string, int> oldIndex;
 
-            string dllName = string.Format("{0}.Utils.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetUtilsTypeList(base.ProjectName);
             string key = "DBRuleConstant";
             if(typeList.ContainsKey(key))
             {

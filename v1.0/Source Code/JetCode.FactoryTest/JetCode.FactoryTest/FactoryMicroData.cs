@@ -35,7 +35,7 @@ namespace JetCode.FactoryTest
 
         protected override void WriteContent(StringWriter writer)
         {
-            SortedList<string, Type> dataTypeList = Utils.GetTypeList(this.ProjectName, "E3000.Data.dll");
+            SortedList<string, Type> dataTypeList = Utils.GetDataTypeList(this.ProjectName);
             foreach (ObjectSchema obj in base.MappingSchema.Objects)
             {
                 if (obj.Alias == "UsrAccount" || obj.Alias == "CacheOffline")

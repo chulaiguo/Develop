@@ -10,30 +10,84 @@ namespace JetCode.FactoryLocalWrapper
     {
         public const string _ServiceName = "MAS";
 
-        public static SortedList<string, Type> GetTypeList(string projectName, string dllName)
+        private static float GetLastestVersion(string projectName)
+        {
+            DirectoryInfo info = new DirectoryInfo(string.Format(@"E:\Work\Projects\{0}", projectName));
+            DirectoryInfo[] list = info.GetDirectories();
+
+            float maxVersion = 0;
+            foreach (DirectoryInfo item in list)
+            {
+                float version;
+                if (float.TryParse(item.Name.Substring(1), out version))
+                {
+                    if (version >= maxVersion)
+                    {
+                        maxVersion = version;
+                    }
+                }
+            }
+
+            return maxVersion;
+        }
+
+        public static SortedList<string, Type> GetDataServiceTypeList(string projectName)
         {
             SortedList<string, Type> retList = new SortedList<string, Type>();
 
-            StringCollection list = new StringCollection();
-            list.Add(string.Format(@"E:\Work\{0}\Bin\{1}", projectName, dllName));
-            list.Add(string.Format(@"E:\Work\{0}V2\Bin\{1}", projectName, dllName));
-            
-            foreach (string dll in list)
+            string path = string.Format(@"E:\Work\Projects\{0}\v{1:f1}\Bin\{0}.DataService.v{1:f1}.dll", projectName, GetLastestVersion(projectName));
+            Assembly assembly = Assembly.LoadFrom(path);
+            if (assembly != null)
             {
-                if (File.Exists(dll))
+                Type[] typeList = assembly.GetTypes();
+                foreach (Type item in typeList)
                 {
-                    Assembly assembly = Assembly.LoadFrom(dll);
-                    if (assembly != null)
-                    {
-                        Type[] typeList = assembly.GetTypes();
-                        foreach (Type item in typeList)
-                        {
-                            if (retList.ContainsKey(item.Name))
-                                continue;
+                    if (retList.ContainsKey(item.Name))
+                        continue;
 
-                            retList.Add(item.Name, item);
-                        }
-                    }
+                    retList.Add(item.Name, item);
+                }
+            }
+
+            return retList;
+        }
+
+        public static SortedList<string, Type> GetFacadeServiceTypeList(string projectName)
+        {
+            SortedList<string, Type> retList = new SortedList<string, Type>();
+
+            string path = string.Format(@"E:\Work\Projects\{0}\v{1:f1}\Bin\{0}.FacadeService.v{1:f1}.dll", projectName, GetLastestVersion(projectName));
+            Assembly assembly = Assembly.LoadFrom(path);
+            if (assembly != null)
+            {
+                Type[] typeList = assembly.GetTypes();
+                foreach (Type item in typeList)
+                {
+                    if (retList.ContainsKey(item.Name))
+                        continue;
+
+                    retList.Add(item.Name, item);
+                }
+            }
+
+            return retList;
+        }
+
+        public static SortedList<string, Type> GetBizServiceTypeList(string projectName)
+        {
+            SortedList<string, Type> retList = new SortedList<string, Type>();
+
+            string path = string.Format(@"E:\Work\Projects\{0}\v{1:f1}\Bin\{0}.{2}Service.v{1:f1}.dll", projectName, GetLastestVersion(projectName), _ServiceName);
+            Assembly assembly = Assembly.LoadFrom(path);
+            if (assembly != null)
+            {
+                Type[] typeList = assembly.GetTypes();
+                foreach (Type item in typeList)
+                {
+                    if (retList.ContainsKey(item.Name))
+                        continue;
+
+                    retList.Add(item.Name, item);
                 }
             }
 

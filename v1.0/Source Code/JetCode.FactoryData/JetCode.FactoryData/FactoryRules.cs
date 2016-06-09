@@ -43,8 +43,7 @@ namespace JetCode.FactoryData
 
         private void WriteRulesData(StringWriter writer)
         {
-            string dllName = string.Format("{0}.Data.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetDataTypeList(base.ProjectName);
 
             foreach (ObjectSchema item in base.MappingSchema.Objects)
             {

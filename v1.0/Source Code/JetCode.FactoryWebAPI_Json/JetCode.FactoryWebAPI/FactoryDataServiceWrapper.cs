@@ -40,8 +40,7 @@ namespace JetCode.FactoryWebAPI
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.DataService.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetDataServiceTypeList(base.ProjectName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {
                 if (!item.Key.EndsWith("DataService") || !item.Value.IsPublic)

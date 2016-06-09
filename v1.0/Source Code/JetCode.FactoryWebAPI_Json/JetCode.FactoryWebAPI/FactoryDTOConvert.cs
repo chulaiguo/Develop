@@ -107,8 +107,7 @@ namespace JetCode.FactoryWebAPI
 
         private void WriteDataDTO(StringWriter writer)
         {
-            string dllName = string.Format("{0}.Data.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetDataTypeList(base.ProjectName);
             foreach (KeyValuePair<string, Type> pair in typeList)
             {
                 if (pair.Key.EndsWith("Collection"))
@@ -239,8 +238,7 @@ namespace JetCode.FactoryWebAPI
 
         private void WriteBizDTO(StringWriter writer)
         {
-            string dllName = string.Format("{0}.BizData.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetBizDataTypeList(base.ProjectName);
             foreach (KeyValuePair<string, Type> pair in typeList)
             {
                 if (pair.Key.EndsWith("Collection"))

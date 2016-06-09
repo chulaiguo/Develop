@@ -54,7 +54,7 @@ namespace JetCode.FactoryTest
             writer.WriteLine("\tpublic partial class ServiceFactory : ServiceBase, IServiceFactory");
             writer.WriteLine("\t{");
 
-            SortedList<string, Type> dataTypeList = Utils.GetTypeList(this.ProjectName, "E3000.DataService.dll");
+            SortedList<string, Type> dataTypeList = Utils.GetDataTypeList(this.ProjectName);
             foreach (ObjectSchema obj in base.MappingSchema.Objects)
             {
                 if (obj.Alias == "UsrAccount" || obj.Alias == "CacheOffline")

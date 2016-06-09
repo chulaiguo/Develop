@@ -46,8 +46,7 @@ namespace JetCode.FactoryWebAPI
             writer.WriteLine("\tpublic class JsonDataServiceController : ApiController");
             writer.WriteLine("\t{");
 
-            string dllName = string.Format("{0}.DataService.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetDataServiceTypeList(base.ProjectName);
             foreach (KeyValuePair<string, Type> item in typeList)
             {
                 if (!item.Key.EndsWith("Service") || !item.Value.IsPublic)

@@ -36,8 +36,7 @@ namespace JetCode.FactoryTest
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.Data.dll", base.ProjectName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetDataTypeList(base.ProjectName);
 
             MappingInsertOrder order = new MappingInsertOrder(base.MappingSchema);
             StringCollection insertOrderList = order.GetInsertOrder();

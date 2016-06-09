@@ -32,18 +32,18 @@ namespace JetCode.FactoryTest
 
         protected override void WriteContent(StringWriter writer)
         {
-           //3
+            //3
             //Old
-            Assembly old = Utils.GetDataAssembly(base.ProjectName);
+            SortedList < string, Type > list = Utils.GetDataTypeList(base.ProjectName);
             SortedList<string, Type> oldTypeIndex = new SortedList<string, Type>();
-            Type[] types = old.GetTypes();
-            foreach (Type item in types)
+            foreach (KeyValuePair<string, Type> pair in list)
             {
-                if(!item.Name.EndsWith("Data"))
+          
+                if(!pair.Key.EndsWith("Data"))
                     continue;
 
-                string name = item.Name.Substring(0, item.Name.Length - 4);
-                oldTypeIndex.Add(name, item);
+                string name = pair.Key.Substring(0, pair.Key.Length - 4);
+                oldTypeIndex.Add(name, pair.Value);
             }
 
             //Current

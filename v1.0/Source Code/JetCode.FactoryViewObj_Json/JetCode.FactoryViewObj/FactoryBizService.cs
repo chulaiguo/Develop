@@ -38,8 +38,7 @@ namespace JetCode.FactoryViewObj
 
         protected override void WriteContent(StringWriter writer)
         {
-            string dllName = string.Format("{0}.{1}Service.dll", base.ProjectName, Utils._ServiceName);
-            SortedList<string, Type> typeList = Utils.GetTypeList(base.ProjectName, dllName);
+            SortedList<string, Type> typeList = Utils.GetBizServiceTypeList(base.ProjectName);
             writer.WriteLine("\tpublic static class Biz{0}", Utils._ServiceName);
             writer.WriteLine("\t{");
             foreach (KeyValuePair<string, Type> item in typeList)
